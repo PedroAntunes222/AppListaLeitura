@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { getUser } from '../../service/API'
 import {  Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import CardLivro from '../../components/CardLivro/CardLivro';
-import { FAB, TextInput } from "@react-native-material/core";
+import { FAB } from "@react-native-material/core";
+import { TextInput } from 'react-native-paper';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import RNPickerSelect from 'react-native-picker-select';
-
-const win = Dimensions.get('window');
-const ratio = win.width/541;
 
 export default function ListaLivros({navigation, route}) {
 
@@ -40,7 +38,6 @@ export default function ListaLivros({navigation, route}) {
         getLivros();
     });
   }, [navigation]);
-
     
     useEffect(() => {
       let livrosFilter = livros;
@@ -88,10 +85,14 @@ export default function ListaLivros({navigation, route}) {
 
         <View style={styles.pesquisa}>
           <TextInput 
-            onChangeText={(e) => setPesquisa(e)}
-            value={pesquisa}
+            mode='outlined'
             label="Pesquise o livro aqui" 
-            variant="standard"
+            value={pesquisa}
+            onChangeText={(e) => setPesquisa(e)}
+            textColor='#fff'
+            outlineColor='#fff'
+            activeOutlineColor='#fff'
+            style={{ backgroundColor:"#282c34" }}
           />
         </View>
 
@@ -100,13 +101,14 @@ export default function ListaLivros({navigation, route}) {
             <Text> Gênero </Text>
             <RNPickerSelect
               placeholder={{ }}
-                onValueChange={(value) => setFilterGenero(value)}
-                value={filterGenero}
-                items={[
+              style={{placeholder: {color: "fff"}}}
+              onValueChange={(value) => setFilterGenero(value)}
+              value={filterGenero}
+              items={[
                     { label: 'Todos', value: 'todos' },
                     { label: 'Filosofia', value: 'Filosofia' },
                     { label: 'Fantasia', value: 'Fantasia' },
-                ]}
+              ]}
               pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden' } }}
             />
           </View> 
@@ -177,9 +179,13 @@ export default function ListaLivros({navigation, route}) {
         </ScrollView>
       </SafeAreaView>
     );
-  }
+}
 
-  const styles = StyleSheet.create({
+    
+const win = Dimensions.get('window');
+const ratio = win.width/541;
+
+const styles = StyleSheet.create({
     botoes: {
       flexDirection: "row",
       flexWrap: "wrap",
@@ -202,5 +208,5 @@ export default function ListaLivros({navigation, route}) {
       flexDirection: "row",
       flexWrap: "wrap"
     }
-  });
+});
   

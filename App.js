@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,8 +12,16 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator style={styles.background}>
-        <Stack.Screen name="Home" component={ListaLivros} options={{ title: 'Estante' }}/>
+      <Stack.Navigator
+        screenOptions={{
+          contentStyle:{ backgroundColor:'#282c34' }
+        }}>
+        <Stack.Screen name="Home" component={ListaLivros} 
+          options={{ 
+            title: 'Minha estante', 
+            headerStyle: {backgroundColor: '#343944'},
+            headerTintColor: '#fff',
+          }} />
         <Stack.Screen name="Page" component={MostraLivro}  options={({ route }) => ({ title: route.params.title })}/>
         <Stack.Screen name="Add" component={AdicionaLivro}  options={{ title: 'Adicionar' }}/>
       </Stack.Navigator>

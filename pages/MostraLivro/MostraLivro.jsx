@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getLivro } from '../../service/API'
-import { Text, View, Button, Image, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 
 export default function MostraLivro({ navigation, route }) {
 
