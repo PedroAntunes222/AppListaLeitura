@@ -36,8 +36,8 @@ export default function ListaLivros({navigation, route}) {
     useEffect(() => {
       navigation.addListener('focus', () => {
         getLivros();
-    });
-  }, [navigation]);
+      });
+    }, [navigation]);
     
     useEffect(() => {
       let livrosFilter = livros;
@@ -92,16 +92,17 @@ export default function ListaLivros({navigation, route}) {
             textColor='#fff'
             outlineColor='#fff'
             activeOutlineColor='#fff'
-            style={{ backgroundColor:"#282c34" }}
+            style={{ backgroundColor:"#282c34", color: "#fff" }}
+            theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
         </View>
 
         <View style={styles.filtros}>
-          <View style={styles.filtro}>
-            <Text> Gênero </Text>
+          <View>
+            <Text style={styles.filtroText}> Gênero </Text>
             <RNPickerSelect
               placeholder={{ }}
-              style={{placeholder: {color: "fff"}}}
+              style={{ color: "white"}}
               onValueChange={(value) => setFilterGenero(value)}
               value={filterGenero}
               items={[
@@ -109,12 +110,12 @@ export default function ListaLivros({navigation, route}) {
                     { label: 'Filosofia', value: 'Filosofia' },
                     { label: 'Fantasia', value: 'Fantasia' },
               ]}
-              pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden' } }}
+              pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View> 
 
-          <View style={styles.filtro}>
-            <Text> Completo </Text>
+          <View>
+            <Text style={styles.filtroText}> Completo </Text>
             <RNPickerSelect
                 placeholder={{ }}
                   onValueChange={(value) => setFilterCompleto(value)}
@@ -124,12 +125,12 @@ export default function ListaLivros({navigation, route}) {
                       { label: 'Completo', value: 'completo' },
                       { label: 'Incompleto', value: 'incompleto' }
                   ]}
-                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden' } }}
+                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View> 
 
-          <View style={styles.filtro}>  
-            <Text> Info </Text>        
+          <View>  
+            <Text style={styles.filtroText}> Info </Text>        
             <RNPickerSelect
                 placeholder={{ }}
                 onValueChange={(value) => setFilterInfo(value)}
@@ -140,12 +141,12 @@ export default function ListaLivros({navigation, route}) {
                     { label: 'Avaliação', value: 'rating' },
                     { label: 'Páginas', value: 'paginasTotais' }
                 ]}
-                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden' } }}
+                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View> 
 
-          <View style={styles.filtro}> 
-            <Text> Ordem </Text>
+          <View> 
+            <Text style={styles.filtroText}> Ordem </Text>
               <RNPickerSelect
                 placeholder={{ }}
                 onValueChange={(value) => setFilterOrdenacao(value)}
@@ -154,7 +155,7 @@ export default function ListaLivros({navigation, route}) {
                     { label: 'Crescente', value: 'crescente' },
                     { label: 'Decrescente', value: 'decrescente' }
                 ]}
-                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden' } }}
+                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View>
         </View>
@@ -180,7 +181,6 @@ export default function ListaLivros({navigation, route}) {
       </SafeAreaView>
     );
 }
-
     
 const win = Dimensions.get('window');
 const ratio = win.width/541;
@@ -196,6 +196,9 @@ const styles = StyleSheet.create({
     filtros: {
       flexDirection: "row",
       flexWrap: "wrap"
+    },
+    filtroText: {
+      color: "white"
     },
     addLivro: {
       alignItems: 'center',
