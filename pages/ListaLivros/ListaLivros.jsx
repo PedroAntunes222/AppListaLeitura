@@ -23,9 +23,6 @@ export default function ListaLivros({navigation}) {
 
     const getLivros = async () => {
         // setLoading(true);
-        // let IDLivro = route.params.userid;
-        // const auth = await AsyncStorage.getItem('login');
-        // console.log(auth);
         console.log(await authenticated);
         getUser(await authenticated)
         .then((response) => {
@@ -179,7 +176,7 @@ export default function ListaLivros({navigation}) {
               />
           </View>
 
-          {/* <View style={styles.addLivro}>
+          <View style={styles.addLivro}>
               <FAB 
                 icon={props => <Icon name="plus" {...props} />}
                 onPress={async () =>  {
@@ -187,10 +184,11 @@ export default function ListaLivros({navigation}) {
                   const jsonValue = JSON.stringify(value);
                   await AsyncStorage.setItem('login', jsonValue);
                   setAuthenticated(jsonValue);
-                  console.log(await jsonValue)}}
-                color="#e0e0e0"
+                  // console.log(await jsonValue);
+                }}
+                color="red"
               />
-          </View> */}
+          </View>
 
           {filtered.map((livro, index) => (
             <CardLivro key={index} livro={livro} navigation={navigation} />

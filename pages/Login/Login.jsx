@@ -42,11 +42,13 @@ export default function Login({navigation}) {
           const jsonValue = JSON.stringify(value);
           await AsyncStorage.setItem('login', jsonValue);
           setAuthenticated(jsonValue);
-          console.log(jsonValue)
+          // console.log(jsonValue);
           // navigation.navigate({name: 'Home'});
         }
       }
-    } else console.log("backend está dormindo. Aguarde");
+    } else {
+      console.log("backend está dormindo. Aguarde");
+    }
   };
 
   return (
@@ -55,7 +57,7 @@ export default function Login({navigation}) {
 
         <View>
             <TextInput
-                label="Genero Principal"
+                label="Email"
                 mode="outlined"
                 value={email || ''}
                 onChangeText={(e)=>{setEmail(e)}}
@@ -67,7 +69,7 @@ export default function Login({navigation}) {
             />
 
             <TextInput
-                label="Genero Principal"
+                label="Senha"
                 mode="outlined"
                 value={senha || ''}
                 onChangeText={(e)=>{setSenha(e)}}
