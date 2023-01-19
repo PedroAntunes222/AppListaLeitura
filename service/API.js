@@ -3,8 +3,8 @@ import axios from "axios";
 
 const url = "https://backend-listaleitura-production.up.railway.app";
 
-export function getUser() {
-  return axios.get(url + "/usuario/" + 1);
+export function getUser(id) {
+  return axios.get(url + "/usuario/" + id);
 }
 
 export function getUsers() {
@@ -77,7 +77,7 @@ export function putLivro(
   paginasTotais,
   rating,
   completo,
-  authenticated
+  // authenticated
 ) {
   return axios.put(url + "/livro/"  +  id, {
     capa: capa,
@@ -90,6 +90,6 @@ export function putLivro(
     paginasTotais: paginasTotais,
     rating: rating,
     completo: completo,
-    usuario: { id: authenticated },
+    usuario: { id: 1 },
   });
 }

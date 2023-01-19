@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getLivro } from '../../service/API'
-import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { getLivro, putLivro } from '../../service/API'
+import { TextInput } from 'react-native-paper';
+import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { Stack, FAB } from "@react-native-material/core";
+import { AntDesign } from '@expo/vector-icons';
 
 export default function MostraLivro({ navigation, route }) {
 
@@ -11,6 +14,12 @@ export default function MostraLivro({ navigation, route }) {
   // const [message, setMessage] = useState("");
     
   const [livro, setLivro] = useState([]);
+  const [paginasLidas, setPaginasLidas] = useState('0');
+  const [completo, setCompleto] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [completa, setCompleta] = useState(false);
+  const [titulo, setTitulo] = useState(false);
+
 
   useEffect(() => {
     // setLoading(true);
@@ -19,15 +28,48 @@ export default function MostraLivro({ navigation, route }) {
       .then((response) => {
         setLivro(response.data);
         // setLoading(false);
-        // console.log(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
 
+  useEffect(() => {
+    setPaginasLidas(String(livro.paginasLidas));
+    setRating(livro.rating);
+  }, [livro]);
+
+  const atlPages = (e) => {
+    e.preventDefault();
+    // setAlert(true);
+    putLivro(
+      livro.id,
+      livro.capa,
+      livro.titulo,
+      livro.subTitulo,
+      livro.generoPrincipal,
+      livro.generoSecundario,
+      livro.sinopse,
+      paginasLidas,
+      livro.paginasTotais,
+      livro.rating,
+      completo
+      // authenticated
+    )
+      .then(function (response) {
+        console.log(response);
+        // setMessage("Progresso atualizado")
+        // setAlert(true);
+        console.log('enviado')
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <SafeAreaView>
-      <ScrollView>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ScrollView nestedScrollEnabled={true}>
+
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
           <Image
             style={styles.capa}
             source={
@@ -35,32 +77,71 @@ export default function MostraLivro({ navigation, route }) {
                 {uri: livro.capa }
                 : {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
             }
-        />
-        
-        <View>
-          <Text>{livro.titulo}</Text>
-
-          <Text>
-            
-          {livro.generoPrincipal}
-
-          {livro.generoSecundario && 
-            <>/ {livro.generoSecundario}</>
-          }
-          </Text> 
+          />
+          
+          <Stack fill center spacing={4} style={{position: 'absolute', bottom:-20, right: "10%", zIndex: 1}}>
+                <FAB style={{backgroundColor:'#e0e0e0'}} icon={props => <AntDesign name="edit" size={24} color="black" />} />
+          </Stack>
         </View>
 
-        <Text>{livro.sinopse}</Text>
-        {/* <Button title="Go back" onPress={() => navigation.goBack()} /> */}
+        <View style={styles.centerText}>
+            <Text style={styles.text}> {livro.titulo} </Text>
+
+            <Text style={styles.text}>
+              {livro.generoPrincipal}
+
+              {livro.generoSecundario && 
+                <> / {livro.generoSecundario} </>
+              }
+            </Text> 
+        </View>
+              
+        <View style={{ position: 'relative', flexDirection: "row", flexWrap: "wrap", justifyContent:'center', alignItems: 'center', margin: 10 }}>
+            <TextInput 
+               label="Páginas Lidas"
+               mode="flat"
+               value={paginasLidas || ''}
+               onChangeText={(e)=>{setPaginasLidas(e)}}
+               textColor='#fff'
+               underlineColor='#fff'
+               activeUnderlineColor='#fff'
+               style={{ backgroundColor:"#282c34", width: 140, textAlign: 'center' }}
+               theme={{ colors: { onSurfaceVariant: '#fff'} }}
+            />
+            <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
+
+            <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
+              <FAB onPress={(e) => {atlPages(e)}} style={{backgroundColor:'#4c9cdd'}} icon={props => <AntDesign name="save" size={24} color="black" />} />
+            </Stack>
+        </View>
+
+        <View>
+            <Text style={styles.sinopse}> {livro.sinopse} </Text>
         </View>
       </ScrollView>
-      </SafeAreaView>
-    );
+    </SafeAreaView>
+  );
 }
+
+const win = Dimensions.get('window');
+const ratio = win.width/100;
 
 const styles = StyleSheet.create({
   capa: {
-      width: 150,
-      height: 200
+    width: win.width/1.5,
+    height: 100 * ratio,
+  },
+  centerText: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  text: {
+    color: 'white'
+  },
+  sinopse: {
+    color: 'white',
+    textAlign: 'justify',
+    margin: 16
   }
 });

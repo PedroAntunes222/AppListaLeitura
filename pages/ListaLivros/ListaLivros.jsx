@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getUser } from '../../service/API'
+import AuthContext from '../../service/Auth';
 import {  Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CardLivro from '../../components/CardLivro/CardLivro';
 import { FAB } from "@react-native-material/core";
 import { TextInput } from 'react-native-paper';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import RNPickerSelect from 'react-native-picker-select';
 
-export default function ListaLivros({navigation, route}) {
+export default function ListaLivros({navigation}) {
 
+    const { authenticated } = useContext(AuthContext);
+    const { setAuthenticated } = useContext(AuthContext);
     const [livros, setLivros] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [filterGenero, setFilterGenero] = useState("todos");
@@ -17,10 +21,13 @@ export default function ListaLivros({navigation, route}) {
     const [filterOrdenacao, setFilterOrdenacao] = useState("crescente");
     const [pesquisa, setPesquisa] = useState("");
 
-    const getLivros = () => {
+    const getLivros = async () => {
         // setLoading(true);
         // let IDLivro = route.params.userid;
-        getUser()
+        // const auth = await AsyncStorage.getItem('login');
+        // console.log(auth);
+        console.log(await authenticated);
+        getUser(await authenticated)
         .then((response) => {
             setLivros(response.data.livros);
             // setLoading(false);
@@ -171,6 +178,19 @@ export default function ListaLivros({navigation, route}) {
                 color="#e0e0e0"
               />
           </View>
+
+          {/* <View style={styles.addLivro}>
+              <FAB 
+                icon={props => <Icon name="plus" {...props} />}
+                onPress={async () =>  {
+                  const value = 0;
+                  const jsonValue = JSON.stringify(value);
+                  await AsyncStorage.setItem('login', jsonValue);
+                  setAuthenticated(jsonValue);
+                  console.log(await jsonValue)}}
+                color="#e0e0e0"
+              />
+          </View> */}
 
           {filtered.map((livro, index) => (
             <CardLivro key={index} livro={livro} navigation={navigation} />

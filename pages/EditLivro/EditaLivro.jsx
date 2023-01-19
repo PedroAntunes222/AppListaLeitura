@@ -54,20 +54,19 @@ export default function AdicionaLivro() {
   return (
     <SafeAreaView>
       <ScrollView>
-        
         <View>
 
-          <View>
-            <Image
-              style={styles.capaPreview}
-              source={
-                capa ? {uri: capa} :
-                {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
-              }
-            />
-          </View>
+        <View>
+          <Image
+            style={styles.capaPreview}
+            source={
+              capa ? {uri: capa} :
+              {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
+            }
+          />
+        </View>
         
-          <TextInput
+        <TextInput
               label="Image Adress"
               mode="outlined"
               value={capa || ''}
@@ -151,15 +150,15 @@ export default function AdicionaLivro() {
               style={{ margin: 16, backgroundColor:"#282c34" }}
               theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
+        </View>
 
-          <View style={{ justifyContent: 'center', alignItems: 'center'}}>
-            <Button 
-              style={{width:win.width/2, backgroundColor:"green", marginBottom:16}}
-              mode="outlined" 
-              title="Adicionar" 
-              onPress={(e)=>adicionaLivro(e)} 
-            />
-          </View>
+        <View style={{ justifyContent: 'center', alignItems: 'center'}}>
+          <Button 
+            style={{width:win.width/2, backgroundColor:"green", marginBottom:16}}
+            mode="outlined" 
+            title="Adicionar" 
+            onPress={(e)=>adicionaLivro(e)} 
+          />
         </View>
 
         {snack &&

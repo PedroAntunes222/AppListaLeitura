@@ -1,17 +1,15 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { Stack, Button } from "@react-native-material/core";
+import { Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 
 export default function CardLivro(props) {
   return (
     <TouchableOpacity
-    style={styles.card}
-      onPress={() => props.navigation.navigate({
-        name: 'Page',
-        params: { userid: props.livro.id, title: props.livro.titulo }
-        })
-    }>
+      style={styles.card}
+        onPress={() => props.navigation.navigate({
+          name: 'Page',
+          params: { userid: props.livro.id, title: props.livro.titulo }
+          })
+      }>
         <Image
             style={styles.capa}
             source={
