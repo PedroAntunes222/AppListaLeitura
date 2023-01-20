@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
-import { getLivro, putLivro } from '../../service/API';
+import { getLivro, putLivro, delLivro } from '../../service/API';
 import AuthContext from '../../service/Auth';
 import { TextInput } from 'react-native-paper';
 import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { Stack, FAB } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function MostraLivro({ navigation, route }) {
 
@@ -18,10 +19,9 @@ export default function MostraLivro({ navigation, route }) {
   const [paginasLidas, setPaginasLidas] = useState('0');
   const [completo, setCompleto] = useState(false);
   const [rating, setRating] = useState(0);
-  const [completa, setCompleta] = useState(false);
+  const [completar, setCompletar] = useState(false);
 
-
-  useEffect(() => {
+  const Livro = () => {
     // setLoading(true);
     let IDLivro = route.params.userid;
     getLivro(IDLivro)
@@ -29,13 +29,24 @@ export default function MostraLivro({ navigation, route }) {
         setLivro(response.data);
         // setLoading(false);
       })
-      .catch((error) => console.log(error));
+   .catch((error) => console.log(error));
+  }
+
+  useEffect(() => {
+    Livro();
   }, []);
 
+  useEffect(() => { // atualiza lista ao voltar
+    navigation.addListener('focus', () => {
+      Livro();
+    });
+  }, [navigation]);
+  
   useEffect(() => {
     setPaginasLidas(String(livro.paginasLidas));
     setRating(livro.rating);
   }, [livro]);
+
 
   const atlPages = (e) => {
     e.preventDefault();
@@ -65,11 +76,38 @@ export default function MostraLivro({ navigation, route }) {
       });
   };
 
+  const deletaLivro = (e) => {
+    e.preventDefault();
+    // props.loading(true);
+    delLivro(livro.id)
+      .then(function (response) {
+        console.log(response);
+        navigation.navigate('Home');
+        // props.message(response.data);
+        // props.refresh();
+        // props.loading(false);
+        // props.alert(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+        // props.message(error.data);
+      });
+  };
+
   return (
     <SafeAreaView>
       <ScrollView nestedScrollEnabled={true}>
 
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+       
+          <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
+                <FAB 
+                  style={{backgroundColor:'#d32f2f'}} 
+                  icon={props => <FontAwesome name="trash-o" size={24} color="white" />} 
+                  onPress={(e) => deletaLivro(e)}
+                />
+          </Stack>
+
           <Image
             style={styles.capa}
             source={
@@ -93,6 +131,8 @@ export default function MostraLivro({ navigation, route }) {
 
         <View style={styles.centerText}>
             <Text style={styles.text}> {livro.titulo} </Text>
+            <Text style={styles.text}> {livro.subTitulo} </Text>
+
 
             <Text style={styles.text}>
               {livro.generoPrincipal}
@@ -118,7 +158,9 @@ export default function MostraLivro({ navigation, route }) {
             <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
 
             <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
-              <FAB onPress={(e) => {atlPages(e)}} style={{backgroundColor:'#4c9cdd'}} icon={props => <AntDesign name="save" size={24} color="black" />} />
+              <FAB 
+                onPress={(e) => {atlPages(e)}} 
+                style={{backgroundColor:'#4c9cdd'}} icon={props => <AntDesign name="save" size={24} color="black" />} />
             </Stack>
         </View>
 
@@ -137,6 +179,7 @@ const styles = StyleSheet.create({
   capa: {
     width: win.width/1.5,
     height: 100 * ratio,
+    marginTop: 20
   },
   centerText: {
     justifyContent: 'center',

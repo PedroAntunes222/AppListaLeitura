@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { getLivro } from '../../service/API';
+import { getLivro, putLivro } from '../../service/API';
 import AuthContext from '../../service/Auth';
 import { TextInput } from 'react-native-paper';
 import { Button, Snackbar } from "@react-native-material/core";
@@ -42,10 +42,11 @@ export default function AdicionaLivro({ navigation, route }) {
     setRating(livro.rating);
     setCompleto(livro.completo);
   }, [livro]);
+  
 
   const atlLivro = (e) => {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
     putLivro(
       livro.id,
       capa,
@@ -160,7 +161,7 @@ export default function AdicionaLivro({ navigation, route }) {
               label="N° de páginas"
               mode="outlined"
               value={paginasTotais || ''}
-              onChangeText={(e)=>{setPaginas(e)}}
+              onChangeText={(e)=>{setPaginasTotais(e)}}
               textColor='#fff'
               outlineColor='#fff'
               activeOutlineColor='#fff'
@@ -187,7 +188,7 @@ export default function AdicionaLivro({ navigation, route }) {
             style={{width:win.width/2, backgroundColor:"blue", marginBottom:16}}
             mode="outlined" 
             title="Salvar" 
-            onPress={(e)=>adicionaLivro(e)} 
+            onPress={(e)=> atlLivro(e)} 
           />
         </View>
 
