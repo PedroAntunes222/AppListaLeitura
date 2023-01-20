@@ -57,7 +57,7 @@ export function addLivro(
     paginasLidas: 0,
     paginasTotais: paginasTotais,
     completo: false,
-    usuario: { id: 1 },
+    usuario: { id: authenticated },
   });
 }
 
@@ -77,7 +77,7 @@ export function putLivro(
   paginasTotais,
   rating,
   completo,
-  // authenticated
+  authenticated
 ) {
   return axios.put(url + "/livro/"  +  id, {
     capa: capa,
@@ -90,6 +90,6 @@ export function putLivro(
     paginasTotais: paginasTotais,
     rating: rating,
     completo: completo,
-    usuario: { id: 1 },
+    usuario: { id: authenticated },
   });
 }

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { getLivro, putLivro } from '../../service/API'
+import { useState, useEffect, useContext } from 'react';
+import { getLivro, putLivro } from '../../service/API';
+import AuthContext from '../../service/Auth';
 import { TextInput } from 'react-native-paper';
 import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { Stack, FAB } from "@react-native-material/core";
@@ -7,7 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 export default function MostraLivro({ navigation, route }) {
 
-  // const { authenticated } = useContext(AuthContext);
+  const { authenticated } = useContext(AuthContext);
   // const [refresh, setRefresh] = useState(0);
   // const [loading, setLoading] = useState(true);
   // const [modal, setModal] = useState(false);
@@ -18,7 +19,6 @@ export default function MostraLivro({ navigation, route }) {
   const [completo, setCompleto] = useState(false);
   const [rating, setRating] = useState(0);
   const [completa, setCompleta] = useState(false);
-  const [titulo, setTitulo] = useState(false);
 
 
   useEffect(() => {
@@ -51,8 +51,8 @@ export default function MostraLivro({ navigation, route }) {
       paginasLidas,
       livro.paginasTotais,
       livro.rating,
-      completo
-      // authenticated
+      completo,
+      authenticated
     )
       .then(function (response) {
         console.log(response);
@@ -80,7 +80,14 @@ export default function MostraLivro({ navigation, route }) {
           />
           
           <Stack fill center spacing={4} style={{position: 'absolute', bottom:-20, right: "10%", zIndex: 1}}>
-                <FAB style={{backgroundColor:'#e0e0e0'}} icon={props => <AntDesign name="edit" size={24} color="black" />} />
+                <FAB 
+                  style={{backgroundColor:'#e0e0e0'}} 
+                  icon={props => <AntDesign name="edit" size={24} color="black" />} 
+                  onPress={() => navigation.navigate({
+                    name: 'Edit',
+                    params: { userid: livro.id }
+                    })}
+                />
           </Stack>
         </View>
 

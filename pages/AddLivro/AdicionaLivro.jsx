@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import AuthContext from '../../service/Auth';
 import { useState } from 'react';
 import { addLivro } from '../../service/API';
 import { TextInput } from 'react-native-paper';
@@ -8,7 +9,7 @@ import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'r
 export default function AdicionaLivro() {
 
   const [snack, setSnack] = useState(false);
-
+  const { authenticated } = useContext(AuthContext);
   const [titulo, setTitulo] = useState('');
   const [subTitulo, setSubTitulo] = useState('');
   const [generoPrincipal, setGeneroPrincipal] = useState('');
@@ -38,7 +39,7 @@ export default function AdicionaLivro() {
       generoSecundario,
       sinopse,
       paginas,
-      // authenticated
+      authenticated
     )
       .then(function (response) {
         console.log(response);

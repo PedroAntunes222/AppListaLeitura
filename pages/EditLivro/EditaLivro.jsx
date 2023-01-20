@@ -1,21 +1,75 @@
-import React from 'react'
-import { useState } from 'react';
-import { addLivro } from '../../service/API';
+import React, { useState, useContext, useEffect } from 'react';
+import { getLivro } from '../../service/API';
+import AuthContext from '../../service/Auth';
 import { TextInput } from 'react-native-paper';
 import { Button, Snackbar } from "@react-native-material/core";
 import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 
-export default function AdicionaLivro() {
+export default function AdicionaLivro({ navigation, route }) {
 
   const [snack, setSnack] = useState(false);
-
+  const { authenticated } = useContext(AuthContext);
+  const [livro, setLivro] = useState([]);
   const [titulo, setTitulo] = useState('');
   const [subTitulo, setSubTitulo] = useState('');
   const [generoPrincipal, setGeneroPrincipal] = useState('');
   const [generoSecundario, setGeneroSecundario] = useState('');
-  const [paginas, setPaginas] = useState('');
+  const [paginasTotais, setPaginasTotais] = useState('');
   const [capa, setCapa] = useState('');
   const [sinopse, setSinopse] = useState('');
+  const [rating, setRating] = useState("")
+  const [completo, setCompleto] = useState("");
+
+  useEffect(() => {
+    // setLoading(true);
+    let IDLivro = route.params.userid;
+    getLivro(IDLivro)
+      .then((response) => {
+        setLivro(response.data);
+        // setLoading(false);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    setTitulo(livro.titulo);
+    setSubTitulo(livro.subTitulo);
+    setGeneroPrincipal(livro.generoPrincipal);
+    setGeneroSecundario(livro.generoSecundario);
+    setSinopse(livro.sinopse);
+    setPaginasTotais(String(livro.paginasTotais));
+    setCapa(livro.capa);
+    setRating(livro.rating);
+    setCompleto(livro.completo);
+  }, [livro]);
+
+  const atlLivro = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    putLivro(
+      livro.id,
+      capa,
+      titulo,
+      subTitulo,
+      generoPrincipal,
+      generoSecundario,
+      sinopse,
+      livro.paginasLidas,
+      paginasTotais,
+      rating,
+      livro.completo,
+      authenticated
+    )
+      .then(function (response) {
+        console.log(response);
+        // setMessage(response.data);
+        // setLoading(false);
+        // setSuccess(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const limpaForm = () => {
     setTitulo("");
@@ -23,32 +77,8 @@ export default function AdicionaLivro() {
     setGeneroPrincipal("");
     setGeneroSecundario("");
     setSinopse("");
-    setPaginas("");
+    setPaginasTotais("");
     setCapa("");
-  };
-
-  const adicionaLivro = (e) => {
-    e.preventDefault();
-    // setLoading(true);
-    addLivro(
-      capa,
-      titulo,
-      subTitulo,
-      generoPrincipal,
-      generoSecundario,
-      sinopse,
-      paginas,
-      // authenticated
-    )
-      .then(function (response) {
-        console.log(response);
-        limpaForm();
-        setSnack(true)
-      })
-      .catch(function (error) {
-        console.log(error);
-        // setMessage(error.data);
-      });
   };
 
   return (
@@ -129,7 +159,7 @@ export default function AdicionaLivro() {
           <TextInput
               label="N° de páginas"
               mode="outlined"
-              value={paginas || ''}
+              value={paginasTotais || ''}
               onChangeText={(e)=>{setPaginas(e)}}
               textColor='#fff'
               outlineColor='#fff'
@@ -154,9 +184,9 @@ export default function AdicionaLivro() {
 
         <View style={{ justifyContent: 'center', alignItems: 'center'}}>
           <Button 
-            style={{width:win.width/2, backgroundColor:"green", marginBottom:16}}
+            style={{width:win.width/2, backgroundColor:"blue", marginBottom:16}}
             mode="outlined" 
-            title="Adicionar" 
+            title="Salvar" 
             onPress={(e)=>adicionaLivro(e)} 
           />
         </View>

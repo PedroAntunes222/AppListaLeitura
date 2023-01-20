@@ -17,7 +17,7 @@ export default function ListaLivros({navigation}) {
     const [filtered, setFiltered] = useState([]);
     const [filterGenero, setFilterGenero] = useState("todos");
     const [filterCompleto, setFilterCompleto] = useState("todos");
-    const [filterInfo, setFilterInfo] = useState("titulo");
+    const [filterInfo, setFilterInfo] = useState("id");
     const [filterOrdenacao, setFilterOrdenacao] = useState("crescente");
     const [pesquisa, setPesquisa] = useState("");
 
@@ -37,7 +37,7 @@ export default function ListaLivros({navigation}) {
       getLivros();
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // atualiza lista ao voltar
       navigation.addListener('focus', () => {
         getLivros();
       });
@@ -134,7 +134,7 @@ export default function ListaLivros({navigation}) {
           </View> 
 
           <View>  
-            <Text style={styles.filtroText}> Info </Text>        
+            <Text style={styles.filtroText}> Ordenar por </Text>        
             <RNPickerSelect
                 placeholder={{ }}
                 onValueChange={(value) => setFilterInfo(value)}

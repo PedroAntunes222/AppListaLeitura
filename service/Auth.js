@@ -1,21 +1,16 @@
-import React, { useState, createContext, useEffect } from "react";
-import {  Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import React, { useState, createContext } from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// import Cadastro from "../pages/Login/Cadastro/Cadastro";
-import ListaLivros from '../pages/ListaLivros/ListaLivros';
-import MostraLivro from '../pages/MostraLivro/MostraLivro';
-import AdicionaLivro from '../pages/AddLivro/AdicionaLivro';
-import Login from '../pages/Login/Login';
+import Login from "../pages/Login/Login";
 
 const AuthContext = createContext({
   authenticated: 0,
   setAuthenticated: (auth) => {},
 });
 
-export const AuthProvider = () => {
+export const AuthProvider = ({ children }) => {
 
   const getData = async () => {
     try {
@@ -38,23 +33,7 @@ export const AuthProvider = () => {
               contentStyle:{backgroundColor:'#282c34'}
             }}>
         {authenticated > 0 ? (
-          <>
-            <Stack.Screen name="Home" component={ListaLivros} options={{ 
-                title: 'Minha estante', 
-                headerStyle: {backgroundColor: '#343944'},
-                headerTintColor: '#fff',
-            }} />
-            <Stack.Screen name="Page" component={MostraLivro}  options={({ route }) => ({ 
-                title: route.params.title,
-                headerStyle: {backgroundColor: '#343944'},
-                headerTintColor: '#fff',
-            })} />
-            <Stack.Screen name="Add" component={AdicionaLivro}  options={{ 
-                title: 'Adicionar',
-                headerStyle: {backgroundColor: '#343944'},
-                headerTintColor: '#fff', 
-            }} />
-          </>
+          children
         ) : (
           <Stack.Screen name="Login" component={Login}  options={{ 
               title: 'Login',
