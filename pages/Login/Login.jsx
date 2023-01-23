@@ -22,7 +22,7 @@ export default function Login({navigation}) {
         setUsuarios(response.data);
       })
       .catch(function (error) {
-        console.log(error.data);
+        console.log(error);
       });
   }, []);
 
@@ -82,9 +82,19 @@ export default function Login({navigation}) {
 
           <View style={{ justifyContent: 'center', alignItems: 'center'}}>
               <Button 
-                  style={{width:win.width/2, backgroundColor:"green", marginBottom:16}}
+                  style={{width:win.width/1.5, borderWidth: 1, borderColor:"#90caf9", marginBottom:16}}
+                  mode="outlined" 
+                  title="Cadastro" 
+                  color="#282c34"
+                  tintColor="#90caf9"
+                  onPress={() => navigation.navigate('Cadastro')}
+              />
+              <Button 
+                  style={{width:win.width/1.5, borderWidth: 1, borderColor:"#66bb6a", marginBottom:16}}
                   mode="outlined" 
                   title="Entrar" 
+                  color="#282c34"
+                  tintColor="#66bb6a"
                   onPress={(e) => enviaLogin(e)} 
               />
           </View>

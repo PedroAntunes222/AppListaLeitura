@@ -1,6 +1,7 @@
 
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Button } from "@react-native-material/core";
 
 import { AuthProvider } from '../service/Auth';
 import ListaLivros from './ListaLivros/ListaLivros'
@@ -18,6 +19,9 @@ export default function Rotas() {
                 title: 'Minha estante', 
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff',
+                headerRight: () => (
+                  <Button title="Update count" />
+                ),
             }} />
             <Stack.Screen name="Add" component={AdicionaLivro}  options={{ 
                 title: 'Adicionar',
