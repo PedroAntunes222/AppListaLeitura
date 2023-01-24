@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { getLivro, putLivro } from '../../service/API';
 import AuthContext from '../../service/Auth';
 import { TextInput } from 'react-native-paper';
+import { Stack, FAB } from "@react-native-material/core";
 import { Button, Snackbar } from "@react-native-material/core";
-import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function AdicionaLivro({ navigation, route }) {
 
@@ -72,22 +74,21 @@ export default function AdicionaLivro({ navigation, route }) {
       });
   };
 
-  const limpaForm = () => {
-    setTitulo("");
-    setSubTitulo("");
-    setGeneroPrincipal("");
-    setGeneroSecundario("");
-    setSinopse("");
-    setPaginasTotais("");
-    setCapa("");
-  };
-
   return (
     <SafeAreaView>
       <ScrollView>
         <View>
 
         <View>
+
+          <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
+              <FAB 
+                style={{backgroundColor:'#4c9cdd'}} 
+                icon={props => <FontAwesome name="save" size={24} color="black" />} 
+                onPress={(e) => {atlLivro(e)}} 
+              />
+          </Stack>
+
           <Image
             style={styles.capaPreview}
             source={
@@ -183,27 +184,21 @@ export default function AdicionaLivro({ navigation, route }) {
           />
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center'}}>
+        {/* <View style={{ justifyContent: 'center', alignItems: 'center'}}>
           <Button 
-            style={{width:win.width/2, backgroundColor:"blue", marginBottom:16}}
+            style={{width:win.width/1.5, borderWidth: 1, borderColor:"#90caf9", marginBottom:16}}
             mode="outlined" 
             title="Salvar" 
+            color="#282c34"
+            tintColor="#90caf9"
             onPress={(e)=> atlLivro(e)} 
           />
-        </View>
+        </View> */}
 
         {snack &&
           <Snackbar
             style={styles.Snackbar}
-            message= { titulo + " foi adicionado" }
-            action={
-              <Button 
-                onPress={(e) => setSnack(false)}
-                mode="text"
-                title="Fechar"
-                color="#BB86FC"
-              />
-            }
+            message= { titulo + " foi editado" }
           />
         }
       </ScrollView>
@@ -223,6 +218,7 @@ const styles = StyleSheet.create({
   capaPreview: {
     width: win.width/1.5,
     height: 100 * ratio,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginTop: 20
   }
 });

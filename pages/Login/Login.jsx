@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import {  Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { View, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import AuthContext from '../../service/Auth';
 import { getUsers } from "../../service/API";
 import { TextInput } from 'react-native-paper';
-import { Button, Snackbar } from "@react-native-material/core";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from "@react-native-material/core";
 
 export default function Login({navigation}) {
 
@@ -40,7 +39,7 @@ export default function Login({navigation}) {
         } else {
           const value = user[0].id;
           const jsonValue = JSON.stringify(value);
-          await AsyncStorage.setItem('login', jsonValue);
+          // await AsyncStorage.setItem('login', jsonValue);
           setAuthenticated(jsonValue);
           // console.log(jsonValue);
           // navigation.navigate({name: 'Home'});
@@ -84,7 +83,7 @@ export default function Login({navigation}) {
               <Button 
                   style={{width:win.width/1.5, borderWidth: 1, borderColor:"#90caf9", marginBottom:16}}
                   mode="outlined" 
-                  title="Cadastro" 
+                  title="Cadastrar" 
                   color="#282c34"
                   tintColor="#90caf9"
                   onPress={() => navigation.navigate('Cadastro')}

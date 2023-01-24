@@ -65,7 +65,7 @@ export default function Cadastro () {
               <Button 
                   style={{width:win.width/1.5, borderWidth: 1, borderColor:"#66bb6a", marginBottom:16}}
                   mode="outlined" 
-                  title="Cadastro" 
+                  title="Cadastrar" 
                   color="#282c34"
                   tintColor="#66bb6a"
                   onPress={(e) => NovoUser(e)} 

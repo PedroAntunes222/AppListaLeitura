@@ -11,8 +11,7 @@ import RNPickerSelect from 'react-native-picker-select';
 
 export default function ListaLivros({navigation}) {
 
-    const { authenticated } = useContext(AuthContext);
-    const { setAuthenticated } = useContext(AuthContext);
+    const { authenticated, setAuthenticated } = useContext(AuthContext);
     const [livros, setLivros] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [filterGenero, setFilterGenero] = useState("todos");
@@ -166,7 +165,7 @@ export default function ListaLivros({navigation}) {
   
         <View style={styles.cards}>
           
-          <View style={styles.addLivro}>
+        <View style={styles.addLivro}>
               <FAB 
                 icon={props => <Icon name="plus" {...props} />}
                 onPress={() => navigation.navigate({
@@ -174,25 +173,11 @@ export default function ListaLivros({navigation}) {
                 })}
                 color="#e0e0e0"
               />
-          </View>
+        </View>
 
-          <View style={styles.addLivro}>
-              <FAB 
-                icon={props => <Icon name="plus" {...props} />}
-                onPress={async () =>  {
-                  const value = 0;
-                  const jsonValue = JSON.stringify(value);
-                  await AsyncStorage.setItem('login', jsonValue);
-                  setAuthenticated(jsonValue);
-                  // console.log(await jsonValue);
-                }}
-                color="red"
-              />
-          </View>
-
-          {filtered.map((livro, index) => (
-            <CardLivro key={index} livro={livro} navigation={navigation} />
-          ))}
+        {filtered.map((livro, index) => (
+          <CardLivro key={index} livro={livro} navigation={navigation} />
+        ))}
         </View>
 
         </ScrollView>

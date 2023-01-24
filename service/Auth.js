@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const auth = getData();
+  const auth = 0;
   const [authenticated, setAuthenticated] = useState(auth);
   const Stack = createNativeStackNavigator();
 

@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
+import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import AuthContext from '../../service/Auth';
 import { useState } from 'react';
 import { addLivro } from '../../service/API';
 import { TextInput } from 'react-native-paper';
+import { Stack, FAB } from "@react-native-material/core";
 import { Button, Snackbar } from "@react-native-material/core";
-import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function AdicionaLivro() {
 
@@ -57,8 +59,15 @@ export default function AdicionaLivro() {
       <ScrollView>
         
         <View>
-
           <View>
+            <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
+                <FAB 
+                  style={{backgroundColor:'green'}} 
+                  icon={props => <AntDesign name="addfile" size={24} color="black" />} 
+                  onPress={(e) => {atlLivro(e)}} 
+                />
+            </Stack>
+
             <Image
               style={styles.capaPreview}
               source={
@@ -153,28 +162,12 @@ export default function AdicionaLivro() {
               theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
 
-          <View style={{ justifyContent: 'center', alignItems: 'center'}}>
-            <Button 
-              style={{width:win.width/2, backgroundColor:"green", marginBottom:16}}
-              mode="outlined" 
-              title="Adicionar" 
-              onPress={(e)=>adicionaLivro(e)} 
-            />
-          </View>
         </View>
 
         {snack &&
           <Snackbar
             style={styles.Snackbar}
             message= { titulo + " foi adicionado" }
-            action={
-              <Button 
-                onPress={(e) => setSnack(false)}
-                mode="text"
-                title="Fechar"
-                color="#BB86FC"
-              />
-            }
           />
         }
       </ScrollView>
@@ -194,6 +187,7 @@ const styles = StyleSheet.create({
   capaPreview: {
     width: win.width/1.5,
     height: 100 * ratio,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginTop: 20
   }
 });

@@ -158,9 +158,11 @@ export default function MostraLivro({ navigation, route }) {
             <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
 
             <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
-              <FAB 
-                onPress={(e) => {atlPages(e)}} 
-                style={{backgroundColor:'#4c9cdd'}} icon={props => <AntDesign name="save" size={24} color="black" />} />
+                <FAB 
+                  style={{backgroundColor:'#4c9cdd'}} 
+                  icon={props => <FontAwesome name="save" size={24} color="black" />} 
+                  onPress={(e) => {atlPages(e)}} 
+                />
             </Stack>
         </View>
 
