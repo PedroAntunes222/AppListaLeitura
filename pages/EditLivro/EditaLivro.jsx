@@ -6,6 +6,8 @@ import { TextInput } from 'react-native-paper';
 import { Stack, FAB } from "@react-native-material/core";
 import { Button, Snackbar } from "@react-native-material/core";
 import { FontAwesome } from '@expo/vector-icons';
+import RNPickerSelect from 'react-native-picker-select';
+import selectGeneros from '../../service/Generos';
 
 export default function AdicionaLivro({ navigation, route }) {
 
@@ -134,28 +136,28 @@ export default function AdicionaLivro({ navigation, route }) {
           />
 
           <View>
-            <TextInput
-                label="Genero Principal"
-                mode="outlined"
-                value={generoPrincipal || ''}
-                onChangeText={(e)=>{setGeneroPrincipal(e)}}
-                textColor='#fff'
-                outlineColor='#fff'
-                activeOutlineColor='#fff'
-                style={{ margin: 16, backgroundColor:"#282c34" }}
-                theme={{ colors: { onSurfaceVariant: '#fff'} }}
-            />
-            <TextInput
-                label="Genero Secundário"
-                mode="outlined"
-                value={generoSecundario || ''}
-                onChangeText={(e)=>{setGeneroSecundario(e)}}
-                textColor='#fff'
-                outlineColor='#fff'
-                activeOutlineColor='#fff'
-                style={{ margin: 16, backgroundColor:"#282c34" }}
-                theme={{ colors: { onSurfaceVariant: '#fff'} }}
-            />
+          <View style={{flexDirection: "row", flexWrap: "wrap"}}>
+            <RNPickerSelect
+                  placeholder={{
+                    label: 'Genero Principal',
+                    value: "",
+                  }}
+                  onValueChange={(value) => setGeneroPrincipal(value)}
+                  value={generoPrincipal}
+                  items={selectGeneros}
+                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+              />
+               <RNPickerSelect
+                  placeholder={{
+                    label: 'Genero Secundário',
+                    value: "",
+                  }}
+                  onValueChange={(value) => setGeneroSecundario(value)}
+                  value={generoSecundario}
+                  items={selectGeneros}
+                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+              />
+          </View>
           </View>
 
           <TextInput

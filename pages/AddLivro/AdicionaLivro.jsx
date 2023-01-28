@@ -1,16 +1,19 @@
-import React, { useContext } from 'react'
-import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react'
+import { addLivro, getGeneros } from '../../service/API';
+import { Image, Text, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import AuthContext from '../../service/Auth';
-import { useState } from 'react';
-import { addLivro } from '../../service/API';
 import { TextInput } from 'react-native-paper';
+import RNPickerSelect from 'react-native-picker-select';
 import { Stack, FAB } from "@react-native-material/core";
 import { Button, Snackbar } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import selectGeneros from '../../service/Generos';
 
-export default function AdicionaLivro() {
+export default function AdicionaLivro({navigation}) {
 
   const [snack, setSnack] = useState(false);
+  const [generos, setGeneros] = useState([]);
   const { authenticated } = useContext(AuthContext);
   const [titulo, setTitulo] = useState('');
   const [subTitulo, setSubTitulo] = useState('');
@@ -53,6 +56,25 @@ export default function AdicionaLivro() {
         // setMessage(error.data);
       });
   };
+  
+  useEffect(() => {
+    getGeneros()
+    .then(function (response) {
+      setGeneros(response.data);
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+      console.log(error);
+    });
+  }, [])
+
+  // useEffect(() => {
+  //   generos.map((genero) => (
+  //   setGenerosList(arr => [...arr, genero.nome])
+  //   ))
+  //   console.log(generosList);
+  // }, [generos]);
 
   return (
     <SafeAreaView>
@@ -64,7 +86,7 @@ export default function AdicionaLivro() {
                 <FAB 
                   style={{backgroundColor:'green'}} 
                   icon={props => <AntDesign name="addfile" size={24} color="black" />} 
-                  onPress={(e) => {atlLivro(e)}} 
+                  onPress={(e) => {adicionaLivro(e)}} 
                 />
             </Stack>
 
@@ -75,6 +97,14 @@ export default function AdicionaLivro() {
                 {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
               }
             />
+
+            {/* <Stack fill center spacing={4} style={{position: 'absolute', bottom:0, right: "10%", zIndex: 1}}>
+                <FAB 
+                  style={{backgroundColor:'blue'}} 
+                  icon={props => <Entypo name="add-to-list" size={24} color="black" />} 
+                  onPress={() => navigation.navigate('Generos')} 
+                />
+            </Stack> */}
           </View>
         
           <TextInput
@@ -112,29 +142,27 @@ export default function AdicionaLivro() {
               theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
 
-          <View>
-            <TextInput
-                label="Genero Principal"
-                mode="outlined"
-                value={generoPrincipal || ''}
-                onChangeText={(e)=>{setGeneroPrincipal(e)}}
-                textColor='#fff'
-                outlineColor='#fff'
-                activeOutlineColor='#fff'
-                style={{ margin: 16, backgroundColor:"#282c34" }}
-                theme={{ colors: { onSurfaceVariant: '#fff'} }}
-            />
-            <TextInput
-                label="Genero Secundário"
-                mode="outlined"
-                value={generoSecundario || ''}
-                onChangeText={(e)=>{setGeneroSecundario(e)}}
-                textColor='#fff'
-                outlineColor='#fff'
-                activeOutlineColor='#fff'
-                style={{ margin: 16, backgroundColor:"#282c34" }}
-                theme={{ colors: { onSurfaceVariant: '#fff'} }}
-            />
+          <View style={{flexDirection: "row", flexWrap: "wrap"}}>
+            <RNPickerSelect
+                  placeholder={{
+                    label: 'Genero Principal',
+                    value: "",
+                  }}
+                  onValueChange={(value) => setGeneroPrincipal(value)}
+                  value={generoPrincipal}
+                  items={selectGeneros}
+                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+              />
+               <RNPickerSelect
+                  placeholder={{
+                    label: 'Genero Secundário',
+                    value: "",
+                  }}
+                  onValueChange={(value) => setGeneroSecundario(value)}
+                  value={generoSecundario}
+                  items={selectGeneros}
+                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+              />
           </View>
 
           <TextInput
@@ -170,6 +198,7 @@ export default function AdicionaLivro() {
             message= { titulo + " foi adicionado" }
           />
         }
+        
       </ScrollView>
     </SafeAreaView>
   )

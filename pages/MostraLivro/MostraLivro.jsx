@@ -23,10 +23,10 @@ export default function MostraLivro({ navigation, route }) {
 
   const Livro = () => {
     // setLoading(true);
-    let IDLivro = route.params.userid;
-    getLivro(IDLivro)
+    getLivro(route.params.userid)
       .then((response) => {
         setLivro(response.data);
+        // console.log(response.data)
         // setLoading(false);
       })
    .catch((error) => console.log(error));
@@ -81,7 +81,7 @@ export default function MostraLivro({ navigation, route }) {
     // props.loading(true);
     delLivro(livro.id)
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
         navigation.navigate('Home');
         // props.message(response.data);
         // props.refresh();

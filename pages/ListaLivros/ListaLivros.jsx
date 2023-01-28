@@ -159,7 +159,7 @@ export default function ListaLivros({navigation}) {
                     { label: 'Decrescente', value: 'decrescente' }
                 ]}
                 pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
-            />
+              />
           </View>
         </View>
   
@@ -168,9 +168,7 @@ export default function ListaLivros({navigation}) {
         <View style={styles.addLivro}>
               <FAB 
                 icon={props => <Icon name="plus" {...props} />}
-                onPress={() => navigation.navigate({
-                  name: 'Add'
-                })}
+                onPress={() => navigation.navigate('Add')}
                 color="#e0e0e0"
               />
         </View>

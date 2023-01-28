@@ -9,10 +9,9 @@ import ListaLivros from './ListaLivros/ListaLivros'
 import MostraLivro from './MostraLivro/MostraLivro';
 import AdicionaLivro from './AddLivro/AdicionaLivro';
 import EditaLivro from './EditLivro/EditaLivro';
+import AdicionaGenero from "./AddLivro/AddGenero/AdicionaGenero";
 
 export default function Rotas() {
-
-  const { setAuthenticated } = useContext(AuthContext);
   const Stack = createNativeStackNavigator();
 
   return (
@@ -34,6 +33,11 @@ export default function Rotas() {
             }} />
             <Stack.Screen name="Add" component={AdicionaLivro}  options={{ 
                 title: 'Adicionar',
+                headerStyle: {backgroundColor: '#343944'},
+                headerTintColor: '#fff', 
+            }} />
+             <Stack.Screen name="Generos" component={AdicionaGenero}  options={{ 
+                title: 'Generos',
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff', 
             }} />
