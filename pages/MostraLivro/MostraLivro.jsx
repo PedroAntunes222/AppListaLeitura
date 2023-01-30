@@ -7,6 +7,7 @@ import { Stack, FAB } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { ProgressBar } from 'react-native-paper';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 export default function MostraLivro({ navigation, route }) {
 
@@ -15,13 +16,12 @@ export default function MostraLivro({ navigation, route }) {
   // const [loading, setLoading] = useState(true);
   // const [modal, setModal] = useState(false);
   // const [message, setMessage] = useState("");
-    
   const [livro, setLivro] = useState([]);
   const [paginasLidas, setPaginasLidas] = useState('0');
   const [progress, setProgress] = useState(0)
   const [completo, setCompleto] = useState(false);
+  const [paginaCompleta, setpaginaCompleta] = useState(false);
   const [rating, setRating] = useState(0);
-  const [completar, setCompletar] = useState(false);
 
   const Livro = () => {
     // setLoading(true);
@@ -34,10 +34,6 @@ export default function MostraLivro({ navigation, route }) {
    .catch((error) => console.log(error));
   }
 
-  useEffect(() => {
-    Livro();
-  }, []);
-
   useEffect(() => { // atualiza lista ao voltar
     navigation.addListener('focus', () => {
       Livro();
@@ -45,48 +41,28 @@ export default function MostraLivro({ navigation, route }) {
   }, [navigation]);
   
   useEffect(() => {
-    setPaginasLidas(String(livro.paginasLidas));
     setRating(livro.rating);
-    const calcProgress = Number(((livro?.paginasLidas/livro?.paginasTotais*100)/100).toFixed(2));
+    setCompleto(livro.completo);
+    setPaginasLidas(String(livro.paginasLidas));
+  }, [livro]);
+
+  useEffect(() => {
+    const calcProgress = Number(((paginasLidas/livro.paginasTotais*100)/100).toFixed(2));
     if(calcProgress > 0){
       setProgress(calcProgress);
     } else {
       setProgress(0);
     }
-  }, [livro]);
- 
-  const atlPages = (e) => {
-    e.preventDefault();
-    // setAlert(true);
-    if(livro.paginasTotais === paginasLidas){
-      setCompleto(true);
-    }
-    putLivro(
-      livro.id,
-      livro.capa,
-      livro.titulo,
-      livro.subTitulo,
-      livro.generoPrincipal,
-      livro.generoSecundario,
-      livro.sinopse,
-      paginasLidas,
-      livro.paginasTotais,
-      livro.rating,
-      completo,
-      authenticated
-    )
-      .then(function (response) {
-        console.log(response);
-        // setMessage("Progresso atualizado")
-        // setAlert(true);
-        // console.log('enviado');
-        Livro();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
 
+    if(Number(paginasLidas) === livro.paginasTotais && livro.completo === false){
+      setCompleto(true);
+      setpaginaCompleta(true);
+    } else {
+      setCompleto(false);
+      setpaginaCompleta(false);
+    }
+  });
+  
   const deletaLivro = (e) => {
     e.preventDefault();
     // props.loading(true);
@@ -105,12 +81,110 @@ export default function MostraLivro({ navigation, route }) {
       });
   };
 
+  const atlPages = () => {
+    putLivro(
+      livro.id,
+      livro.capa,
+      livro.titulo,
+      livro.subTitulo,
+      livro.generoPrincipal,
+      livro.generoSecundario,
+      livro.sinopse,
+      paginasLidas,
+      livro.paginasTotais,
+      livro.rating,
+      completo,
+      authenticated
+    )
+      .then(function (response) {
+        // setMessage("Progresso atualizado")
+        // setAlert(true);
+        // console.log('enviado');
+        console.log(response.data);
+        Livro();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  const completaLivro = () => {
+    putLivro(
+      livro.id,
+      livro.capa,
+      livro.titulo,
+      livro.subTitulo,
+      livro.generoPrincipal,
+      livro.generoSecundario,
+      livro.sinopse,
+      paginasLidas,
+      livro.paginasTotais,
+      rating,
+      completo,
+      authenticated
+    )
+    .then(function (response) {
+        // setMessage("Progresso atualizado")
+        // setAlert(true);
+        // console.log('enviado');
+        console.log(response.data);
+        Livro();
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+  };
+
+  const NumeroPaginas = () => {
+
+    return (
+      <>
+  {/* Páginas livro */}
+            <View style={{ position: 'relative', flexDirection: "row", flexWrap: "wrap", justifyContent:'center', alignItems: 'center', margin: 10 }}>
+              <TextInput 
+                label="Páginas Lidas"
+                mode="flat"
+                value={paginasLidas || ''}
+                onChangeText={(e)=>{setPaginasLidas(e)}}
+                textColor='#fff'
+                underlineColor='#fff'
+                activeUnderlineColor='#fff'
+                style={{ backgroundColor:"#282c34", width: 140, textAlign: 'center' }}
+                theme={{ colors: { onSurfaceVariant: '#fff'} }}
+            />
+            <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
+
+            <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
+              
+              {paginaCompleta
+                ?
+                  <FAB 
+                    style={{backgroundColor:'green'}} 
+                    icon={<AntDesign name="checkcircleo" size={24} color="black" />} 
+                    onPress={(e) => {completaLivro()}} 
+                  />
+                :
+                  <FAB 
+                    style={{backgroundColor:'#4c9cdd'}} 
+                    icon={<FontAwesome name="save" size={24} color="black" />} 
+                    onPress={(e) => {atlPages()}} 
+                  />
+              }
+                
+            </Stack>
+            
+        </View>
+      </>
+    )
+  }
+
   return (
     <SafeAreaView>
       <ScrollView nestedScrollEnabled={true}>
 
         <ProgressBar progress={progress} color='green' />
 
+        {/* Capa livro */}
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
        
           <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
@@ -135,13 +209,14 @@ export default function MostraLivro({ navigation, route }) {
                   style={{backgroundColor:'#e0e0e0'}} 
                   icon={<AntDesign name="edit" size={24} color="black" />} 
                   onPress={() => navigation.navigate({
-                    name: 'Edit',
-                    params: { userid: livro.id }
+                      name: 'Edit',
+                      params: { userid: livro.id }
                     })}
                 />
           </Stack>
         </View>
       
+        {/* Generos livro */}
         <View style={styles.centerText}>
             {/* <Text style={styles.text}> {livro.titulo} </Text> */}
             {/* <Text style={styles.text}> {livro.subTitulo} </Text> */}
@@ -155,31 +230,33 @@ export default function MostraLivro({ navigation, route }) {
             </Text>  
            
         </View>
-              
-        <View style={{ position: 'relative', flexDirection: "row", flexWrap: "wrap", justifyContent:'center', alignItems: 'center', margin: 10 }}>
-            <TextInput 
-               label="Páginas Lidas"
-               mode="flat"
-               value={paginasLidas || ''}
-               onChangeText={(e)=>{setPaginasLidas(e)}}
-               textColor='#fff'
-               underlineColor='#fff'
-               activeUnderlineColor='#fff'
-               style={{ backgroundColor:"#282c34", width: 140, textAlign: 'center' }}
-               theme={{ colors: { onSurfaceVariant: '#fff'} }}
+
+      {livro.completo
+        ?
+          <AirbnbRating
+            count={5}
+            reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
+            defaultRating={rating || 0}
+            size={20}
+            onFinishRating={setRating}
+          />
+        :
+          <NumeroPaginas />
+      }
+
+        {paginaCompleta &&
+          <>
+            <AirbnbRating
+              count={5}
+              reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
+              defaultRating={0}
+              size={20}
+              onFinishRating={setRating}
             />
-            <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
+          </>
+        }
 
-            <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
-                <FAB 
-                  style={{backgroundColor:'#4c9cdd'}} 
-                  icon={<FontAwesome name="save" size={24} color="black" />} 
-                  onPress={(e) => {atlPages(e)}} 
-                />
-            </Stack>
-            
-        </View>
-
+        {/* Sinopse livro */}
         <View>
             <Text style={styles.sinopse}> {livro.sinopse} </Text>
         </View>

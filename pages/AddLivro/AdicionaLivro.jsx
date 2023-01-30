@@ -47,7 +47,7 @@ export default function AdicionaLivro({navigation}) {
       authenticated
     )
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
         limpaForm();
         setSnack(true)
       })

@@ -24,7 +24,6 @@ export default function CardLivro(props) {
               }
         />
 
-
         {!props.livro.capa && (
           <Text style={styles.text}>{props.livro.titulo}</Text>
         )}
