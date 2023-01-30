@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { ProgressBar, MD3Colors } from 'react-native-paper';
 
 export default function CardLivro(props) {
   return (
@@ -7,8 +8,12 @@ export default function CardLivro(props) {
       style={styles.card}
         onPress={() => props.navigation.navigate({
           name: 'Page',
-          params: { userid: props.livro.id, title: props.livro.titulo }
-          })
+          params: { 
+            userid: props.livro.id, 
+            title: props.livro.titulo,
+            subtitle: `- ${props.livro.subTitulo }`
+          }
+        })
       }>
         <Image
             style={styles.capa}
@@ -18,6 +23,7 @@ export default function CardLivro(props) {
                 : {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
               }
         />
+
 
         {!props.livro.capa && (
           <Text style={styles.text}>{props.livro.titulo}</Text>

@@ -6,6 +6,7 @@ import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } f
 import { Stack, FAB } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { ProgressBar } from 'react-native-paper';
 
 export default function MostraLivro({ navigation, route }) {
 
@@ -17,6 +18,7 @@ export default function MostraLivro({ navigation, route }) {
     
   const [livro, setLivro] = useState([]);
   const [paginasLidas, setPaginasLidas] = useState('0');
+  const [progress, setProgress] = useState(0)
   const [completo, setCompleto] = useState(false);
   const [rating, setRating] = useState(0);
   const [completar, setCompletar] = useState(false);
@@ -45,12 +47,20 @@ export default function MostraLivro({ navigation, route }) {
   useEffect(() => {
     setPaginasLidas(String(livro.paginasLidas));
     setRating(livro.rating);
+    const calcProgress = Number(((livro?.paginasLidas/livro?.paginasTotais*100)/100).toFixed(2));
+    if(calcProgress > 0){
+      setProgress(calcProgress);
+    } else {
+      setProgress(0);
+    }
   }, [livro]);
-
-
+ 
   const atlPages = (e) => {
     e.preventDefault();
     // setAlert(true);
+    if(livro.paginasTotais === paginasLidas){
+      setCompleto(true);
+    }
     putLivro(
       livro.id,
       livro.capa,
@@ -69,7 +79,8 @@ export default function MostraLivro({ navigation, route }) {
         console.log(response);
         // setMessage("Progresso atualizado")
         // setAlert(true);
-        console.log('enviado')
+        // console.log('enviado');
+        Livro();
       })
       .catch(function (error) {
         console.log(error);
@@ -98,16 +109,18 @@ export default function MostraLivro({ navigation, route }) {
     <SafeAreaView>
       <ScrollView nestedScrollEnabled={true}>
 
+        <ProgressBar progress={progress} color='green' />
+
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
        
           <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'#d32f2f'}} 
-                  icon={props => <FontAwesome name="trash-o" size={24} color="white" />} 
+                  icon={<FontAwesome name="trash-o" size={24} color="white" />} 
                   onPress={(e) => deletaLivro(e)}
                 />
           </Stack>
-
+          
           <Image
             style={styles.capa}
             source={
@@ -120,7 +133,7 @@ export default function MostraLivro({ navigation, route }) {
           <Stack fill center spacing={4} style={{position: 'absolute', bottom:-20, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'#e0e0e0'}} 
-                  icon={props => <AntDesign name="edit" size={24} color="black" />} 
+                  icon={<AntDesign name="edit" size={24} color="black" />} 
                   onPress={() => navigation.navigate({
                     name: 'Edit',
                     params: { userid: livro.id }
@@ -128,11 +141,10 @@ export default function MostraLivro({ navigation, route }) {
                 />
           </Stack>
         </View>
-
+      
         <View style={styles.centerText}>
-            <Text style={styles.text}> {livro.titulo} </Text>
-            <Text style={styles.text}> {livro.subTitulo} </Text>
-
+            {/* <Text style={styles.text}> {livro.titulo} </Text> */}
+            {/* <Text style={styles.text}> {livro.subTitulo} </Text> */}
 
             <Text style={styles.text}>
               {livro.generoPrincipal}
@@ -140,7 +152,8 @@ export default function MostraLivro({ navigation, route }) {
               {livro.generoSecundario && 
                 <> / {livro.generoSecundario} </>
               }
-            </Text> 
+            </Text>  
+           
         </View>
               
         <View style={{ position: 'relative', flexDirection: "row", flexWrap: "wrap", justifyContent:'center', alignItems: 'center', margin: 10 }}>
@@ -160,10 +173,11 @@ export default function MostraLivro({ navigation, route }) {
             <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
                 <FAB 
                   style={{backgroundColor:'#4c9cdd'}} 
-                  icon={props => <FontAwesome name="save" size={24} color="black" />} 
+                  icon={<FontAwesome name="save" size={24} color="black" />} 
                   onPress={(e) => {atlPages(e)}} 
                 />
             </Stack>
+            
         </View>
 
         <View>

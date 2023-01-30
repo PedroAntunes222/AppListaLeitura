@@ -136,26 +136,26 @@ export default function AdicionaLivro({ navigation, route }) {
           />
 
           <View>
-          <View style={{flexDirection: "row", flexWrap: "wrap"}}>
+          <View style={{flexDirection: "row", flexWrap: "wrap", justifyContent:'center'}}>
             <RNPickerSelect
                   placeholder={{
-                    label: 'Genero Principal',
+                    label: 'Genero 1',
                     value: "",
                   }}
                   onValueChange={(value) => setGeneroPrincipal(value)}
                   value={generoPrincipal}
                   items={selectGeneros}
-                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
               />
                <RNPickerSelect
                   placeholder={{
-                    label: 'Genero Secundário',
+                    label: 'Genero 2',
                     value: "",
                   }}
                   onValueChange={(value) => setGeneroSecundario(value)}
                   value={generoSecundario}
                   items={selectGeneros}
-                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
               />
           </View>
           </View>

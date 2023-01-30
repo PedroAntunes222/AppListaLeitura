@@ -57,17 +57,17 @@ export default function AdicionaLivro({navigation}) {
       });
   };
   
-  useEffect(() => {
-    getGeneros()
-    .then(function (response) {
-      setGeneros(response.data);
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-      console.log(error);
-    });
-  }, [])
+  // useEffect(() => {
+  //   getGeneros()
+  //   .then(function (response) {
+  //     setGeneros(response.data);
+  //     console.log(response.data);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //     console.log(error);
+  //   });
+  // }, [])
 
   // useEffect(() => {
   //   generos.map((genero) => (
@@ -85,7 +85,7 @@ export default function AdicionaLivro({navigation}) {
             <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'green'}} 
-                  icon={props => <AntDesign name="addfile" size={24} color="black" />} 
+                  icon={<AntDesign name="addfile" size={24} color="black" />} 
                   onPress={(e) => {adicionaLivro(e)}} 
                 />
             </Stack>
@@ -101,7 +101,7 @@ export default function AdicionaLivro({navigation}) {
             {/* <Stack fill center spacing={4} style={{position: 'absolute', bottom:0, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'blue'}} 
-                  icon={props => <Entypo name="add-to-list" size={24} color="black" />} 
+                  icon={<Entypo name="add-to-list" size={24} color="black" />} 
                   onPress={() => navigation.navigate('Generos')} 
                 />
             </Stack> */}
@@ -142,53 +142,53 @@ export default function AdicionaLivro({navigation}) {
               theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
 
-          <View style={{flexDirection: "row", flexWrap: "wrap"}}>
-            <RNPickerSelect
-                  placeholder={{
-                    label: 'Genero Principal',
-                    value: "",
-                  }}
-                  onValueChange={(value) => setGeneroPrincipal(value)}
-                  value={generoPrincipal}
-                  items={selectGeneros}
-                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
-              />
-               <RNPickerSelect
-                  placeholder={{
-                    label: 'Genero Secundário',
-                    value: "",
-                  }}
-                  onValueChange={(value) => setGeneroSecundario(value)}
-                  value={generoSecundario}
-                  items={selectGeneros}
-                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
-              />
-          </View>
+          <View style={{flexDirection: "row", flexWrap: "wrap", justifyContent:'center'}}>
+              <RNPickerSelect
+                    placeholder={{
+                      label: 'Genero 1',
+                      value: "",
+                    }}
+                    onValueChange={(value) => setGeneroPrincipal(value)}
+                    value={generoPrincipal}
+                    items={selectGeneros}
+                    pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                />
+                <RNPickerSelect
+                    placeholder={{
+                      label: 'Genero 2',
+                      value: "",
+                    }}
+                    onValueChange={(value) => setGeneroSecundario(value)}
+                    value={generoSecundario}
+                    items={selectGeneros}
+                    pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                />
+            </View>
 
-          <TextInput
-              label="N° de páginas"
-              mode="outlined"
-              value={paginas || ''}
-              onChangeText={(e)=>{setPaginas(e)}}
-              textColor='#fff'
-              outlineColor='#fff'
-              activeOutlineColor='#fff'
-              style={{ margin: 16, backgroundColor:"#282c34" }}
-              theme={{ colors: { onSurfaceVariant: '#fff'} }}
-          />
-          <TextInput
-              multiline
-              numberOfLines={4}
-              label="Sinopse"
-              mode="outlined"
-              value={sinopse || ''}
-              onChangeText={(e)=>{setSinopse(e)}}
-              textColor='#fff'
-              outlineColor='#fff'
-              activeOutlineColor='#fff'
-              style={{ margin: 16, backgroundColor:"#282c34" }}
-              theme={{ colors: { onSurfaceVariant: '#fff'} }}
-          />
+            <TextInput
+                label="N° de páginas"
+                mode="outlined"
+                value={paginas || ''}
+                onChangeText={(e)=>{setPaginas(e)}}
+                textColor='#fff'
+                outlineColor='#fff'
+                activeOutlineColor='#fff'
+                style={{ margin: 16, backgroundColor:"#282c34" }}
+                theme={{ colors: { onSurfaceVariant: '#fff'} }}
+            />
+            <TextInput
+                multiline
+                numberOfLines={4}
+                label="Sinopse"
+                mode="outlined"
+                value={sinopse || ''}
+                onChangeText={(e)=>{setSinopse(e)}}
+                textColor='#fff'
+                outlineColor='#fff'
+                activeOutlineColor='#fff'
+                style={{ margin: 16, backgroundColor:"#282c34" }}
+                theme={{ colors: { onSurfaceVariant: '#fff'} }}
+            />
 
         </View>
 

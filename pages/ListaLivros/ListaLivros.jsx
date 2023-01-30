@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { getUser } from '../../service/API'
 import AuthContext from '../../service/Auth';
 import {  Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CardLivro from '../../components/CardLivro/CardLivro';
 import { FAB } from "@react-native-material/core";
 import { TextInput } from 'react-native-paper';
@@ -22,7 +21,7 @@ export default function ListaLivros({navigation}) {
 
     const getLivros = async () => {
         // setLoading(true);
-        console.log(await authenticated);
+        // console.log(await authenticated);
         getUser(await authenticated)
         .then((response) => {
             setLivros(response.data.livros);
@@ -113,12 +112,12 @@ export default function ListaLivros({navigation}) {
                     { label: 'Filosofia', value: 'Filosofia' },
                     { label: 'Fantasia', value: 'Fantasia' },
               ]}
-              pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+              pickerProps={{ style: { height: 100 * ratio, width:win.width/2.2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View> 
 
           <View>
-            <Text style={styles.filtroText}> Completo </Text>
+            <Text style={styles.filtroText}> Estado </Text>
             <RNPickerSelect
                 placeholder={{ }}
                   onValueChange={(value) => setFilterCompleto(value)}
@@ -128,7 +127,7 @@ export default function ListaLivros({navigation}) {
                       { label: 'Completo', value: 'completo' },
                       { label: 'Incompleto', value: 'incompleto' }
                   ]}
-                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                pickerProps={{ style: { height: 100 * ratio, width:win.width/2.2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View> 
 
@@ -144,7 +143,7 @@ export default function ListaLivros({navigation}) {
                     { label: 'Avaliação', value: 'rating' },
                     { label: 'Páginas', value: 'paginasTotais' }
                 ]}
-                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                pickerProps={{ style: { height: 100 * ratio, width:win.width/2.2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
             />
           </View> 
 
@@ -158,24 +157,25 @@ export default function ListaLivros({navigation}) {
                     { label: 'Crescente', value: 'crescente' },
                     { label: 'Decrescente', value: 'decrescente' }
                 ]}
-                pickerProps={{ style: { height: 100 * ratio, width:win.width/2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                pickerProps={{ style: { height: 100 * ratio, width:win.width/2.2, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
               />
           </View>
         </View>
-  
+
         <View style={styles.cards}>
           
-        <View style={styles.addLivro}>
-              <FAB 
-                icon={props => <Icon name="plus" {...props} />}
-                onPress={() => navigation.navigate('Add')}
-                color="#e0e0e0"
-              />
-        </View>
+            <View style={styles.addLivro}>
+                  <FAB 
+                    icon={props => <Icon name="plus" {...props} />}
+                    onPress={() => navigation.navigate('Add')}
+                    color="#e0e0e0"
+                  />
+            </View>
 
-        {filtered.map((livro, index) => (
-          <CardLivro key={index} livro={livro} navigation={navigation} />
-        ))}
+            {filtered.map((livro, index) => (
+              <CardLivro key={index} livro={livro} navigation={navigation} />
+            ))}
+
         </View>
 
         </ScrollView>
@@ -196,7 +196,8 @@ const styles = StyleSheet.create({
     },
     filtros: {
       flexDirection: "row",
-      flexWrap: "wrap"
+      flexWrap: "wrap",
+      justifyContent:'center'
     },
     filtroText: {
       color: "white"

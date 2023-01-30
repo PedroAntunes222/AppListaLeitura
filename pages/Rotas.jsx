@@ -1,8 +1,8 @@
 
 import React, { useContext } from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AuthContext from '../service/Auth'
-import { Button } from "@react-native-material/core";
+// import AuthContext from '../service/Auth'
+// import { Button } from "@react-native-material/core";
 
 import { AuthProvider } from '../service/Auth';
 import ListaLivros from './ListaLivros/ListaLivros'
@@ -12,6 +12,7 @@ import EditaLivro from './EditLivro/EditaLivro';
 import AdicionaGenero from "./AddLivro/AddGenero/AdicionaGenero";
 
 export default function Rotas() {
+    
   const Stack = createNativeStackNavigator();
 
   return (
@@ -42,7 +43,7 @@ export default function Rotas() {
                 headerTintColor: '#fff', 
             }} />
             <Stack.Screen name="Page" component={MostraLivro}  options={({ route }) => ({ 
-                title: route.params.title,
+                title: `${route.params.title} ${route.params.subtitle}`,
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff',
             })} />
