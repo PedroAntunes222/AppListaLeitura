@@ -7,7 +7,7 @@ import { Stack, FAB } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { ProgressBar } from 'react-native-paper';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 
 export default function MostraLivro({ navigation, route }) {
 
@@ -238,14 +238,13 @@ export default function MostraLivro({ navigation, route }) {
             reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
             defaultRating={rating || 0}
             size={20}
-            onFinishRating={setRating}
+            isDisabled
           />
         :
           <NumeroPaginas />
       }
 
         {paginaCompleta &&
-          <>
             <AirbnbRating
               count={5}
               reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
@@ -253,7 +252,6 @@ export default function MostraLivro({ navigation, route }) {
               size={20}
               onFinishRating={setRating}
             />
-          </>
         }
 
         {/* Sinopse livro */}

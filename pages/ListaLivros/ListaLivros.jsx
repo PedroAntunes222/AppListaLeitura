@@ -16,7 +16,7 @@ export default function ListaLivros({navigation}) {
     const [filterGenero, setFilterGenero] = useState("todos");
     const [filterCompleto, setFilterCompleto] = useState("todos");
     const [filterInfo, setFilterInfo] = useState("id");
-    const [filterOrdenacao, setFilterOrdenacao] = useState("crescente");
+    const [filterOrdenacao, setFilterOrdenacao] = useState("decrescente");
     const [pesquisa, setPesquisa] = useState("");
 
     const getLivros = async () => {

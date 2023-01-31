@@ -1,6 +1,7 @@
 import React from 'react'
-import { Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { ProgressBar } from 'react-native-paper';
+import { AirbnbRating } from 'react-native-ratings';
 
 export default function CardLivro(props) {
   return (
@@ -27,6 +28,18 @@ export default function CardLivro(props) {
         {!props.livro.capa && (
           <Text style={styles.text}>{props.livro.titulo}</Text>
         )}
+
+        {props.livro.completo && 
+        <View style={styles.rating}>
+            <AirbnbRating
+              count={5}
+              reviews={[""]}
+              defaultRating={props.livro.rating}
+              size={20}
+              isDisabled
+            />
+          </View>
+        }
         
   </TouchableOpacity>
   )
@@ -48,5 +61,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     textAlign: 'center',
     bottom: 30
-  }
+  },
+  rating: {
+    position: 'absolute',
+    bottom: 25,
+  },
 });

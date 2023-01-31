@@ -21,16 +21,6 @@ export default function Rotas() {
                 title: 'Minha estante', 
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff',
-                // headerRight: () => (
-                //   <Button 
-                //       style={{borderWidth: 1, borderColor:"red", marginBottom:16}}
-                //       mode="outlined" 
-                //       title="Sair" 
-                //       color="#343944"
-                //       tintColor="red"
-                //       onPress={console.log('clikado')}
-                //   />
-                // )
             }} />
             <Stack.Screen name="Add" component={AdicionaLivro}  options={{ 
                 title: 'Adicionar',
