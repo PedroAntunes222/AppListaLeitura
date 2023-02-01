@@ -5,7 +5,7 @@ import AuthContext from '../../service/Auth';
 import { TextInput, FAB } from 'react-native-paper';
 import { Stack, Snackbar } from "@react-native-material/core";
 import RNPickerSelect from 'react-native-picker-select';
-import {selectGeneros} from '../../service/Generos';
+import { selectGeneros } from '../../service/Generos';
 import { AntDesign } from '@expo/vector-icons';
 import { AirbnbRating } from 'react-native-ratings';
 
@@ -82,16 +82,6 @@ export default function AdicionaLivro({ route }) {
 
         <View>
 
-          {completo &&
-              <AirbnbRating
-                  count={5}
-                  reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
-                  defaultRating={rating || 0}
-                  size={20}
-                  onFinishRating={setRating}
-              />
-          }
-
           <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
               <FAB 
                 style={{backgroundColor:'#4c9cdd'}} 
@@ -107,6 +97,17 @@ export default function AdicionaLivro({ route }) {
               {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
             }
           />
+
+          {completo &&
+              <AirbnbRating
+                  count={5}
+                  reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
+                  defaultRating={rating || 0}
+                  size={20}
+                  onFinishRating={setRating}
+              />
+          }
+
         </View>
         
         <TextInput
