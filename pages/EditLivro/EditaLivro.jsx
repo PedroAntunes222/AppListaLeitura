@@ -7,8 +7,9 @@ import { Stack, Snackbar } from "@react-native-material/core";
 import RNPickerSelect from 'react-native-picker-select';
 import {selectGeneros} from '../../service/Generos';
 import { AntDesign } from '@expo/vector-icons';
+import { AirbnbRating } from 'react-native-ratings';
 
-export default function AdicionaLivro({ navigation, route }) {
+export default function AdicionaLivro({ route }) {
 
   const [snack, setSnack] = useState(false);
   const { authenticated } = useContext(AuthContext);
@@ -46,7 +47,6 @@ export default function AdicionaLivro({ navigation, route }) {
     setCompleto(livro.completo);
   }, [livro]);
   
-
   const atlLivro = (e) => {
     e.preventDefault();
     // setLoading(true);
@@ -65,7 +65,7 @@ export default function AdicionaLivro({ navigation, route }) {
       authenticated
     )
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
         // setMessage(response.data);
         // setLoading(false);
         // setSuccess(true);
@@ -81,6 +81,16 @@ export default function AdicionaLivro({ navigation, route }) {
         <View>
 
         <View>
+
+          {completo &&
+              <AirbnbRating
+                  count={5}
+                  reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
+                  defaultRating={rating || 0}
+                  size={20}
+                  onFinishRating={setRating}
+              />
+          }
 
           <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
               <FAB 

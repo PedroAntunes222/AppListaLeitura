@@ -5,7 +5,6 @@ import { TextInput } from 'react-native-paper';
 import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { Stack } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { ProgressBar, FAB } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
@@ -233,7 +232,7 @@ export default function MostraLivro({ navigation, route }) {
             :
               <FAB 
                 style={{backgroundColor:'#4c9cdd'}} 
-                icon={props => <FontAwesome name="save" size={24} color="black" />} 
+                icon={props => <AntDesign name="save" size={24} color="black" />} 
                 onPress={(e) => {atlPages()}} 
               />
           }
