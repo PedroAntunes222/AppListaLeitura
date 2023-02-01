@@ -3,9 +3,11 @@ import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Rotas from './pages/Rotas';
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
+
 
 function App() {
+
   return (
      <Rotas />
   );

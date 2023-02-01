@@ -1,4 +1,4 @@
-export default selectGeneros = [
+export const  selectGeneros = [
     { label: 'Fantasia', value: 'Fantasia' },
     { label: 'Filosofia', value: 'Filosofia' },
     { label: 'Romance', value: 'Romance' },

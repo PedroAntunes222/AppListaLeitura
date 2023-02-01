@@ -1,16 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
 import { getUser } from '../../service/API'
 import AuthContext from '../../service/Auth';
-import {  Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import CardLivro from '../../components/CardLivro/CardLivro';
-import { FAB } from "@react-native-material/core";
+import { FAB } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { AntDesign } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
 export default function ListaLivros({navigation}) {
 
-    const { authenticated, setAuthenticated } = useContext(AuthContext);
+    const { authenticated } = useContext(AuthContext);
     const [livros, setLivros] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [filterGenero, setFilterGenero] = useState("todos");
@@ -166,7 +166,9 @@ export default function ListaLivros({navigation}) {
           
             <View style={styles.addLivro}>
                   <FAB 
-                    icon={props => <Icon name="plus" {...props} />}
+                    style={{backgroundColor:'#e0e0e0'}} 
+                    icon={props => <AntDesign name="plus" size={24} color="black" />}
+                    // icon="home-plus"
                     onPress={() => navigation.navigate('Add')}
                     color="#e0e0e0"
                   />

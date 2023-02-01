@@ -3,22 +3,23 @@ import { getLivro, putLivro, delLivro } from '../../service/API';
 import AuthContext from '../../service/Auth';
 import { TextInput } from 'react-native-paper';
 import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
-import { Stack, FAB } from "@react-native-material/core";
+import { Stack } from "@react-native-material/core";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { ProgressBar } from 'react-native-paper';
+import { Feather } from '@expo/vector-icons';
+import { ProgressBar, FAB } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
 
 export default function MostraLivro({ navigation, route }) {
 
   const { authenticated } = useContext(AuthContext);
-  // const [refresh, setRefresh] = useState(0);
   // const [loading, setLoading] = useState(true);
   // const [modal, setModal] = useState(false);
   // const [message, setMessage] = useState("");
   const [livro, setLivro] = useState([]);
   const [paginasLidas, setPaginasLidas] = useState('0');
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(0);
+  const [progressColor, setProgressColor] = useState('green');
   const [completo, setCompleto] = useState(false);
   const [paginaCompleta, setpaginaCompleta] = useState(false);
   const [rating, setRating] = useState(0);
@@ -52,6 +53,12 @@ export default function MostraLivro({ navigation, route }) {
       setProgress(calcProgress);
     } else {
       setProgress(0);
+    }
+
+    if( calcProgress === 1 ){
+      setProgressColor('yellow');
+    } else {
+      setProgressColor('green');
     }
 
     if(Number(paginasLidas) === livro.paginasTotais && livro.completo === false){
@@ -135,54 +142,11 @@ export default function MostraLivro({ navigation, route }) {
     });
   };
 
-  const NumeroPaginas = () => {
-
-    return (
-      <>
-  {/* Páginas livro */}
-            <View style={{ position: 'relative', flexDirection: "row", flexWrap: "wrap", justifyContent:'center', alignItems: 'center', margin: 10 }}>
-              <TextInput 
-                label="Páginas Lidas"
-                mode="flat"
-                value={paginasLidas || ''}
-                onChangeText={(e)=>{setPaginasLidas(e)}}
-                textColor='#fff'
-                underlineColor='#fff'
-                activeUnderlineColor='#fff'
-                style={{ backgroundColor:"#282c34", width: 140, textAlign: 'center' }}
-                theme={{ colors: { onSurfaceVariant: '#fff'} }}
-            />
-            <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
-
-            <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
-              
-              {paginaCompleta
-                ?
-                  <FAB 
-                    style={{backgroundColor:'green'}} 
-                    icon={<AntDesign name="checkcircleo" size={24} color="black" />} 
-                    onPress={(e) => {completaLivro()}} 
-                  />
-                :
-                  <FAB 
-                    style={{backgroundColor:'#4c9cdd'}} 
-                    icon={<FontAwesome name="save" size={24} color="black" />} 
-                    onPress={(e) => {atlPages()}} 
-                  />
-              }
-                
-            </Stack>
-            
-        </View>
-      </>
-    )
-  }
-
   return (
     <SafeAreaView>
       <ScrollView nestedScrollEnabled={true}>
 
-        <ProgressBar progress={progress} color='green' />
+        <ProgressBar progress={progress} color={progressColor} />
 
         {/* Capa livro */}
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
@@ -190,7 +154,7 @@ export default function MostraLivro({ navigation, route }) {
           <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'#d32f2f'}} 
-                  icon={<FontAwesome name="trash-o" size={24} color="white" />} 
+                  icon={props => <Feather name="trash-2" size={24} color="white" />} 
                   onPress={(e) => deletaLivro(e)}
                 />
           </Stack>
@@ -207,7 +171,7 @@ export default function MostraLivro({ navigation, route }) {
           <Stack fill center spacing={4} style={{position: 'absolute', bottom:-20, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'#e0e0e0'}} 
-                  icon={<AntDesign name="edit" size={24} color="black" />} 
+                  icon={props => <AntDesign name="edit" size={24} color="black" />} 
                   onPress={() => navigation.navigate({
                       name: 'Edit',
                       params: { userid: livro.id }
@@ -241,7 +205,43 @@ export default function MostraLivro({ navigation, route }) {
             isDisabled
           />
         :
-          <NumeroPaginas />
+        <>
+          {/* Páginas livro */}
+          <View style={{ position: 'relative', flexDirection: "row", flexWrap: "wrap", justifyContent:'center', alignItems: 'center', margin: 10 }}>
+          <TextInput 
+            label="Páginas Lidas"
+            mode="flat"
+            onChangeText={setPaginasLidas}
+            value={paginasLidas}
+            textColor='#fff'
+            underlineColor='#fff'
+            activeUnderlineColor='#fff'
+            style={{ backgroundColor:"#282c34", width: 140, textAlign: 'center' }}
+            theme={{ colors: { onSurfaceVariant: '#fff'} }}
+          />
+        <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
+
+        <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
+          
+          {paginaCompleta
+            ?
+              <FAB 
+                style={{backgroundColor:'green'}} 
+                icon={props => <AntDesign name="checkcircleo" size={24} color="black" />} 
+                onPress={(e) => {completaLivro()}} 
+              />
+            :
+              <FAB 
+                style={{backgroundColor:'#4c9cdd'}} 
+                icon={props => <FontAwesome name="save" size={24} color="black" />} 
+                onPress={(e) => {atlPages()}} 
+              />
+          }
+            
+        </Stack>
+        
+          </View>
+        </>
       }
 
         {paginaCompleta &&

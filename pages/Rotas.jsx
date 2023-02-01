@@ -1,5 +1,5 @@
 
-import React, { useContext } from "react";
+import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import AuthContext from '../service/Auth'
 // import { Button } from "@react-native-material/core";
@@ -9,7 +9,7 @@ import ListaLivros from './ListaLivros/ListaLivros'
 import MostraLivro from './MostraLivro/MostraLivro';
 import AdicionaLivro from './AddLivro/AdicionaLivro';
 import EditaLivro from './EditLivro/EditaLivro';
-import AdicionaGenero from "./AddLivro/AddGenero/AdicionaGenero";
+// import AdicionaGenero from "./AddLivro/AddGenero/AdicionaGenero";
 
 export default function Rotas() {
     
@@ -24,11 +24,6 @@ export default function Rotas() {
             }} />
             <Stack.Screen name="Add" component={AdicionaLivro}  options={{ 
                 title: 'Adicionar',
-                headerStyle: {backgroundColor: '#343944'},
-                headerTintColor: '#fff', 
-            }} />
-             <Stack.Screen name="Generos" component={AdicionaGenero}  options={{ 
-                title: 'Generos',
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff', 
             }} />

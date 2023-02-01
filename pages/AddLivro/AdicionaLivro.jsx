@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { addLivro, getGeneros } from '../../service/API';
+import { addLivro } from '../../service/API';
 import { Image, Text, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import AuthContext from '../../service/Auth';
-import { TextInput } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
-import { Stack, FAB } from "@react-native-material/core";
-import { Button, Snackbar } from "@react-native-material/core";
+import { Stack, Snackbar } from "@react-native-material/core";
+import { TextInput, FAB } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import selectGeneros from '../../service/Generos';
+import {selectGeneros} from '../../service/Generos';
 
 export default function AdicionaLivro({navigation}) {
 
@@ -56,25 +54,6 @@ export default function AdicionaLivro({navigation}) {
         // setMessage(error.data);
       });
   };
-  
-  // useEffect(() => {
-  //   getGeneros()
-  //   .then(function (response) {
-  //     setGeneros(response.data);
-  //     console.log(response.data);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //     console.log(error);
-  //   });
-  // }, [])
-
-  // useEffect(() => {
-  //   generos.map((genero) => (
-  //   setGenerosList(arr => [...arr, genero.nome])
-  //   ))
-  //   console.log(generosList);
-  // }, [generos]);
 
   return (
     <SafeAreaView>
@@ -85,7 +64,7 @@ export default function AdicionaLivro({navigation}) {
             <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'green'}} 
-                  icon={<AntDesign name="addfile" size={24} color="black" />} 
+                  icon={props => <AntDesign name="addfile" size={24} color="black" />} 
                   onPress={(e) => {adicionaLivro(e)}} 
                 />
             </Stack>
@@ -97,14 +76,6 @@ export default function AdicionaLivro({navigation}) {
                 {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
               }
             />
-
-            {/* <Stack fill center spacing={4} style={{position: 'absolute', bottom:0, right: "10%", zIndex: 1}}>
-                <FAB 
-                  style={{backgroundColor:'blue'}} 
-                  icon={<Entypo name="add-to-list" size={24} color="black" />} 
-                  onPress={() => navigation.navigate('Generos')} 
-                />
-            </Stack> */}
           </View>
         
           <TextInput
@@ -151,7 +122,7 @@ export default function AdicionaLivro({navigation}) {
                     onValueChange={(value) => setGeneroPrincipal(value)}
                     value={generoPrincipal}
                     items={selectGeneros}
-                    pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                    pickerProps={{ style: styles.generoSelector}}
                 />
                 <RNPickerSelect
                     placeholder={{
@@ -161,9 +132,9 @@ export default function AdicionaLivro({navigation}) {
                     onValueChange={(value) => setGeneroSecundario(value)}
                     value={generoSecundario}
                     items={selectGeneros}
-                    pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+                    pickerProps={{ style: styles.generoSelector }}
                 />
-            </View>
+          </View>
 
             <TextInput
                 label="N° de páginas"
@@ -218,5 +189,12 @@ const styles = StyleSheet.create({
     height: 100 * ratio,
     alignSelf: 'center',
     marginTop: 20
+  },
+  generoSelector: {
+    width:win.width/2.5, 
+    height: 10 * ratio, 
+    overflow: 'hidden', 
+    color: "white", 
+    backgroundColor:"transparent",
   }
 });

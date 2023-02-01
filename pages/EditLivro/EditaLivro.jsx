@@ -2,12 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { getLivro, putLivro } from '../../service/API';
 import AuthContext from '../../service/Auth';
-import { TextInput } from 'react-native-paper';
-import { Stack, FAB } from "@react-native-material/core";
-import { Button, Snackbar } from "@react-native-material/core";
-import { FontAwesome } from '@expo/vector-icons';
+import { TextInput, FAB } from 'react-native-paper';
+import { Stack, Snackbar } from "@react-native-material/core";
 import RNPickerSelect from 'react-native-picker-select';
-import selectGeneros from '../../service/Generos';
+import {selectGeneros} from '../../service/Generos';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function AdicionaLivro({ navigation, route }) {
 
@@ -86,7 +85,7 @@ export default function AdicionaLivro({ navigation, route }) {
           <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
               <FAB 
                 style={{backgroundColor:'#4c9cdd'}} 
-                icon={props => <FontAwesome name="save" size={24} color="black" />} 
+                icon={props => <AntDesign name="save" size={24} color="black" />} 
                 onPress={(e) => {atlLivro(e)}} 
               />
           </Stack>
