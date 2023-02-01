@@ -63,7 +63,7 @@ export default function AdicionaLivro({navigation}) {
           <View>
             <Stack fill center spacing={4} style={{position: 'absolute', top:0, right: "10%", zIndex: 1}}>
                 <FAB 
-                  style={{backgroundColor:'red'}} 
+                  style={{backgroundColor:'green'}} 
                   icon={props => <AntDesign name="addfile" size={24} color="black" />} 
                   onPress={(e) => {adicionaLivro(e)}} 
                 />
