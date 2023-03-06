@@ -3,4 +3,5 @@ export const  selectGeneros = [
     { label: 'Filosofia', value: 'Filosofia' },
     { label: 'Romance', value: 'Romance' },
     { label: 'Aventura', value: 'Aventura' },
+    { label: 'Ação', value: 'Ação' },
 ]

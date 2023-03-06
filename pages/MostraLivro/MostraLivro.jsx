@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
-import { getLivro, putLivro, delLivro } from '../../service/API';
-import AuthContext from '../../service/Auth';
+// import { getLivro, putLivro, delLivro } from '../../service/API';
+// import AuthContext from '../../service/Auth';
+import Livro from '../../class/Livro';
+import * as SQLite from 'expo-sqlite';
+import { getLivro, delLivro, putLivro } from '../../localDatabase/sqliteDatabase';
 import { TextInput } from 'react-native-paper';
 import { Text, View, Image, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { Stack } from "@react-native-material/core";
@@ -11,137 +14,127 @@ import { AirbnbRating } from 'react-native-ratings';
 
 export default function MostraLivro({ navigation, route }) {
 
-  const { authenticated } = useContext(AuthContext);
-  // const [loading, setLoading] = useState(true);
+  // const { authenticated } = useContext(AuthContext);
   // const [modal, setModal] = useState(false);
   // const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [db, setDb] = useState(SQLite.openDatabase('biblioteca.db'));
   const [livro, setLivro] = useState([]);
+  const [livroLoaded, setLivroLoaded] = useState(false);
   const [paginasLidas, setPaginasLidas] = useState('0');
+  const [paginasTotais, setPaginasTotais] = useState('0');
   const [progress, setProgress] = useState(0);
   const [progressColor, setProgressColor] = useState('green');
   const [completo, setCompleto] = useState(false);
   const [paginaCompleta, setpaginaCompleta] = useState(false);
   const [rating, setRating] = useState(0);
 
-  const Livro = () => {
-    // setLoading(true);
-    getLivro(route.params.userid)
-      .then((response) => {
-        setLivro(response.data);
-        // console.log(response.data)
-        // setLoading(false);
-      })
-   .catch((error) => console.log(error));
+  const handleLivro = () => {
+    getLivro(route.params.userid, (livro) => {
+      setLivro(livro);
+      console.log(livro)
+      setLivroLoaded(true);
+    });
   }
 
+  useEffect(() => {
+    handleLivro();
+  }, [db]);
+  
   useEffect(() => { // atualiza lista ao voltar
     navigation.addListener('focus', () => {
-      Livro();
+      handleLivro();
     });
   }, [navigation]);
   
   useEffect(() => {
-    setRating(livro.rating);
-    setCompleto(livro.completo);
-    setPaginasLidas(String(livro.paginasLidas));
-  }, [livro]);
+    if (livroLoaded) {
+      setRating(livro[0].rating);
+      setCompleto(livro[0].completo);
+      setPaginasLidas(String(livro[0].paginasLidas));
+      setPaginasTotais(String(livro[0].paginasTotais));
+      setLoading(false);
+    }
+  }, [livroLoaded]);
+
 
   useEffect(() => {
-    const calcProgress = Number(((paginasLidas/livro.paginasTotais*100)/100).toFixed(2));
-    if(calcProgress > 0){
-      setProgress(calcProgress);
-    } else {
-      setProgress(0);
-    }
+    if (livroLoaded) {
 
-    if( calcProgress === 1 ){
-      setProgressColor('yellow');
-    } else {
-      setProgressColor('green');
-    }
+    const calcProgress = Number(((paginasLidas/paginasTotais*100)/100).toFixed(2));
+      if(calcProgress > 0){
+        setProgress(calcProgress);
+      } else {
+        setProgress(0);
+      }
 
-    if(Number(paginasLidas) === livro.paginasTotais && livro.completo === false){
-      setCompleto(true);
-      setpaginaCompleta(true);
-    } else {
-      setCompleto(false);
-      setpaginaCompleta(false);
+      if( calcProgress === 1 ){
+        setProgressColor('yellow');
+      } else {
+        setProgressColor('green');
+      }
+
+      if(Number(paginasLidas) === livro[0].paginasTotais && livro[0].completo === ''){
+        setCompleto('true');
+        setpaginaCompleta(true);
+      } else {
+        setCompleto('');
+        setpaginaCompleta(false);
+      }
     }
-  });
+    
+  }, [livroLoaded, paginasLidas, paginasTotais]);
   
   const deletaLivro = (e) => {
     e.preventDefault();
     // props.loading(true);
-    delLivro(livro.id)
-      .then(function (response) {
-        // console.log(response);
-        navigation.navigate('Home');
-        // props.message(response.data);
-        // props.refresh();
-        // props.loading(false);
-        // props.alert(true);
-      })
-      .catch(function (error) {
-        console.log(error);
-        // props.message(error.data);
-      });
+    delLivro(livro[0].id);
+      
+    navigation.navigate('Home');
   };
 
   const atlPages = () => {
-    putLivro(
-      livro.id,
-      livro.capa,
-      livro.titulo,
-      livro.subTitulo,
-      livro.generoPrincipal,
-      livro.generoSecundario,
-      livro.sinopse,
+    let oldNewLivro = new Livro(
+      livro[0].id,
+      livro[0].capa,
+      livro[0].titulo,
+      livro[0].subtitulo,
+      livro[0].sinopse,
+      livro[0].generoPrincipal,
+      livro[0].generoSecundario,
       paginasLidas,
-      livro.paginasTotais,
-      livro.rating,
-      completo,
-      authenticated
-    )
-      .then(function (response) {
-        // setMessage("Progresso atualizado")
-        // setAlert(true);
-        // console.log('enviado');
-        console.log(response.data);
-        Livro();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      livro[0].paginasTotais,
+      livro[0].rating,
+      completo
+    );
+    console.log('oldNewLivro');
+    console.log(oldNewLivro);
+    putLivro(oldNewLivro);
   }
 
   const completaLivro = () => {
-    putLivro(
-      livro.id,
-      livro.capa,
-      livro.titulo,
-      livro.subTitulo,
-      livro.generoPrincipal,
-      livro.generoSecundario,
-      livro.sinopse,
+    let oldNewLivro = new Livro(
+      livro[0].id,
+      livro[0].capa,
+      livro[0].titulo,
+      livro[0].subtitulo,
+      livro[0].sinopse,
+      livro[0].generoPrincipal,
+      livro[0].generoSecundario,
       paginasLidas,
-      livro.paginasTotais,
+      livro[0].paginasTotais,
       rating,
-      completo,
-      authenticated
-    )
-    .then(function (response) {
-        // setMessage("Progresso atualizado")
-        // setAlert(true);
-        // console.log('enviado');
-        console.log(response.data);
-        Livro();
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+      completo
+    );
+
+    console.log('oldNewLivro');
+    console.log(oldNewLivro);
+
+    putLivro(oldNewLivro);
   };
 
   return (
+    loading  ? (<View></View>) : (
     <SafeAreaView>
       <ScrollView nestedScrollEnabled={true}>
 
@@ -161,19 +154,18 @@ export default function MostraLivro({ navigation, route }) {
           <Image
             style={styles.capa}
             source={
-              livro.capa ?
-                {uri: livro.capa }
+              livro[0].capa ?
+                {uri: livro[0].capa }
                 : {uri:'https://i.pinimg.com/564x/2a/ae/b8/2aaeb8b8c0f40e196b926016a04e591d.jpg'}
             }
           />
-          
           <Stack fill center spacing={4} style={{position: 'absolute', bottom:-20, right: "10%", zIndex: 1}}>
                 <FAB 
                   style={{backgroundColor:'#e0e0e0'}} 
                   icon={props => <AntDesign name="edit" size={24} color="black" />} 
                   onPress={() => navigation.navigate({
                       name: 'Edit',
-                      params: { userid: livro.id }
+                      params: { userid: livro[0].id }
                     })}
                 />
           </Stack>
@@ -181,20 +173,18 @@ export default function MostraLivro({ navigation, route }) {
       
         {/* Generos livro */}
         <View style={styles.centerText}>
-            {/* <Text style={styles.text}> {livro.titulo} </Text> */}
-            {/* <Text style={styles.text}> {livro.subTitulo} </Text> */}
 
             <Text style={styles.text}>
-              {livro.generoPrincipal}
+              {livro[0].generoPrincipal}
 
-              {livro.generoSecundario && 
-                <> / {livro.generoSecundario} </>
+              {livro[0].generoSecundario && 
+                <> / {livro[0].generoSecundario} </>
               }
             </Text>  
            
         </View>
 
-      {livro.completo
+      {livro[0].completo!==''
         ?
           <AirbnbRating
             count={5}
@@ -218,7 +208,7 @@ export default function MostraLivro({ navigation, route }) {
             style={{ backgroundColor:"#282c34", width: 140, textAlign: 'center' }}
             theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
-        <Text style={{ color:'white', width: 50 }}> / {livro.paginasTotais} </Text>
+        <Text style={{ color:'white', width: 50 }}> / {paginasTotais} </Text>
 
         <Stack fill center spacing={4} style={{position: 'absolute', right: 10}}>
           
@@ -255,10 +245,11 @@ export default function MostraLivro({ navigation, route }) {
 
         {/* Sinopse livro */}
         <View>
-            <Text style={styles.sinopse}> {livro.sinopse} </Text>
+            <Text style={styles.sinopse}> {livro[0].sinopse} </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
+    )
   );
 }
 

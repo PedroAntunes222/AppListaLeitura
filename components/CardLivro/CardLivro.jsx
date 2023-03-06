@@ -12,7 +12,7 @@ export default function CardLivro(props) {
           params: { 
             userid: props.livro.id, 
             title: props.livro.titulo,
-            subtitle: `- ${props.livro.subTitulo }`
+            subtitle: props.livro.subtitulo
           }
         })
       }>
@@ -29,7 +29,7 @@ export default function CardLivro(props) {
           <Text style={styles.text}>{props.livro.titulo}</Text>
         )}
 
-        {props.livro.completo && 
+        {props.livro.completo!=='' && 
         <View style={styles.rating}>
             <AirbnbRating
               count={5}
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   text: {
     position: 'absolute',
     textAlign: 'center',
-    bottom: 30
+    top: 30
   },
   rating: {
     position: 'absolute',

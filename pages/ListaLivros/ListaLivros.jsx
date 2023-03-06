@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext, useRef } from 'react';
-import { getUser } from '../../service/API'
-import AuthContext from '../../service/Auth';
+// import { getUser } from '../../service/API'
+// import AuthContext from '../../service/Auth';
+import * as SQLite from 'expo-sqlite';
+import { getLivros, addLivro, initDB } from '../../localDatabase/sqliteDatabase';
 import { selectGeneros } from '../../service/Generos';
 import { Text , View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import { Button } from "@react-native-material/core";
@@ -12,7 +14,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function ListaLivros({navigation}) {
 
-    const { authenticated } = useContext(AuthContext);
+    // const { authenticated } = useContext(AuthContext);
+    const [db, setDb] = useState(SQLite.openDatabase('biblioteca.db'));
     const [livros, setLivros] = useState([]);
     const [filtered, setFiltered] = useState([]);
 
@@ -24,25 +27,18 @@ export default function ListaLivros({navigation}) {
 
     const bottomSheetModalRef = useRef(null);
 
-    const getLivros = async () => {
-        // setLoading(true);
-        // console.log(await authenticated);
-        getUser(await authenticated)
-        .then((response) => {
-            setLivros(response.data.livros);
-            // setLoading(false);
-            // console.log(response.data.livros);
-        })
-        .catch((error) => console.log(error));
+    const handleLivros = (livros) => {
+        setLivros(livros);
     }
 
     useEffect(() => {
-      getLivros();
-    }, []);
+      initDB();
+      getLivros(handleLivros);
+    }, [db]);
 
     useEffect(() => { // atualiza lista ao voltar
       navigation.addListener('focus', () => {
-        getLivros();
+        getLivros(handleLivros);
       });
     }, [navigation]);
     

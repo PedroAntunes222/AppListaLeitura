@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
+import Livro from '../../class/Livro';
 import { Image, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
-import { getLivro, putLivro } from '../../service/API';
-import AuthContext from '../../service/Auth';
+import * as SQLite from 'expo-sqlite';
+import { getLivro, putLivro } from '../../localDatabase/sqliteDatabase';
 import { TextInput, FAB } from 'react-native-paper';
 import { Stack, Snackbar } from "@react-native-material/core";
 import RNPickerSelect from 'react-native-picker-select';
@@ -9,11 +10,14 @@ import { selectGeneros } from '../../service/Generos';
 import { AntDesign } from '@expo/vector-icons';
 import { AirbnbRating } from 'react-native-ratings';
 
-export default function AdicionaLivro({ route }) {
+export default function AdicionaLivro({ route, navigation }) {
 
   const [snack, setSnack] = useState(false);
-  const { authenticated } = useContext(AuthContext);
+  // const { authenticated } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [db, setDb] = useState(SQLite.openDatabase('biblioteca.db'));
   const [livro, setLivro] = useState([]);
+  const [livroLoaded, setLivroLoaded] = useState(false);
   const [titulo, setTitulo] = useState('');
   const [subTitulo, setSubTitulo] = useState('');
   const [generoPrincipal, setGeneroPrincipal] = useState('');
@@ -25,57 +29,59 @@ export default function AdicionaLivro({ route }) {
   const [completo, setCompleto] = useState("");
 
   useEffect(() => {
-    // setLoading(true);
-    let IDLivro = route.params.userid;
-    getLivro(IDLivro)
-      .then((response) => {
-        setLivro(response.data);
-        // setLoading(false);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    getLivro(route.params.userid, (livro) => {
+      setLivro(livro);
+      setLivroLoaded(true);
+    });
+  }, [db]);
 
   useEffect(() => {
-    setTitulo(livro.titulo);
-    setSubTitulo(livro.subTitulo);
-    setGeneroPrincipal(livro.generoPrincipal);
-    setGeneroSecundario(livro.generoSecundario);
-    setSinopse(livro.sinopse);
-    setPaginasTotais(String(livro.paginasTotais));
-    setCapa(livro.capa);
-    setRating(livro.rating);
-    setCompleto(livro.completo);
-  }, [livro]);
+    if (livroLoaded) {
+      // console.log(livro)
+      setTitulo(livro[0].titulo);
+      setSubTitulo(livro[0].subtitulo);
+      setGeneroPrincipal(livro[0].generoPrincipal);
+      setGeneroSecundario(livro[0].generoSecundario);
+      setSinopse(livro[0].sinopse);
+      setPaginasTotais(String(livro[0].paginasTotais));
+      setCapa(livro[0].capa);
+      setRating(livro[0].rating);
+      setCompleto(livro[0].completo);
+      setLoading(false);
+    }
+  }, [livroLoaded]);
   
   const atlLivro = (e) => {
     e.preventDefault();
     // setLoading(true);
-    putLivro(
-      livro.id,
+    let oldNewLivro = new Livro(
+      livro[0].id,
       capa,
       titulo,
       subTitulo,
+      sinopse,
       generoPrincipal,
       generoSecundario,
-      sinopse,
-      livro.paginasLidas,
-      paginasTotais,
+      livro[0].paginasLidas,
+      500,
       rating,
-      livro.completo,
-      authenticated
-    )
-      .then(function (response) {
-        console.log(response.data);
-        // setMessage(response.data);
-        // setLoading(false);
-        // setSuccess(true);
+      livro[0].completo
+    );
+
+     putLivro(oldNewLivro);
+
+      navigation.navigate({
+        name: 'Page',
+        params: {
+          userid: livro[0].id, 
+          title: titulo,
+          subtitle: subTitulo
+        }
       })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
 
   return (
+    loading ? (<View></View>) : (
     <SafeAreaView>
       <ScrollView>
         <View>
@@ -98,7 +104,7 @@ export default function AdicionaLivro({ route }) {
             }
           />
 
-          {completo &&
+          {completo!=='' &&
               <AirbnbRating
                   count={5}
                   reviews={["Péssimo", "Ruim", "OK", "Bom", "Ótimo"]}
@@ -215,6 +221,7 @@ export default function AdicionaLivro({ route }) {
         }
       </ScrollView>
     </SafeAreaView>
+    )
   )
 }
 

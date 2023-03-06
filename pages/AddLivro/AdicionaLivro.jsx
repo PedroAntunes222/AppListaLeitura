@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { addLivro } from '../../service/API';
+// import { addLivro } from '../../service/API';
+import Livro from '../../class/Livro'
+import * as SQLite from 'expo-sqlite';
+import { addLivro, initDB } from '../../localDatabase/sqliteDatabase';
 import { Image, Text, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import AuthContext from '../../service/Auth';
 import RNPickerSelect from 'react-native-picker-select';
@@ -9,6 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import {selectGeneros} from '../../service/Generos';
 
 export default function AdicionaLivro({navigation}) {
+
+  const [db, setDb] = useState(SQLite.openDatabase('biblioteca.db'));
 
   const [snack, setSnack] = useState(false);
   const [generos, setGeneros] = useState([]);
@@ -33,26 +38,27 @@ export default function AdicionaLivro({navigation}) {
 
   const adicionaLivro = (e) => {
     e.preventDefault();
-    // setLoading(true);
-    addLivro(
+
+    const novoLivro = new Livro(
+      1,
       capa,
       titulo,
       subTitulo,
+      sinopse,
       generoPrincipal,
       generoSecundario,
-      sinopse,
-      paginas,
-      authenticated
-    )
-      .then(function (response) {
-        console.log(response.data);
-        limpaForm();
-        setSnack(true)
-      })
-      .catch(function (error) {
-        console.log(error);
-        // setMessage(error.data);
-      });
+      0,
+      Number(paginas),
+      0,
+      ''
+    );
+
+    var str;
+    str = JSON.stringify(novoLivro);
+    str = JSON.stringify(novoLivro, null, 4); // (Optional) beautiful indented output.
+    console.log(str);
+
+    addLivro(novoLivro);
   };
 
   return (
