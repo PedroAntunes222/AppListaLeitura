@@ -5,7 +5,7 @@ import * as SQLite from 'expo-sqlite';
 import { getLivro, putLivro } from '../../localDatabase/sqliteDatabase';
 import { TextInput, FAB } from 'react-native-paper';
 import { Stack, Snackbar } from "@react-native-material/core";
-import RNPickerSelect from 'react-native-picker-select';
+import ModalSelector from 'react-native-modal-selector';
 import { selectGeneros } from '../../service/Generos';
 import { AntDesign } from '@expo/vector-icons';
 import { AirbnbRating } from 'react-native-ratings';
@@ -152,26 +152,28 @@ export default function AdicionaLivro({ route, navigation }) {
           />
 
           <View>
-          <View style={{flexDirection: "row", flexWrap: "wrap", justifyContent:'center'}}>
-            <RNPickerSelect
-                  placeholder={{
-                    label: 'Genero 1',
-                    value: "",
-                  }}
-                  onValueChange={(value) => setGeneroPrincipal(value)}
-                  value={generoPrincipal}
-                  items={selectGeneros}
-                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+          <View style={{flexDirection: "row", flexWrap: "wrap", justifyContent:'space-around'}}>
+              <ModalSelector
+                  style={{width: '40%'}}
+                  data={selectGeneros}
+                  initValue={ generoPrincipal || "Gênero 1" }
+                  initValueTextStyle={{ color: 'white' }} // 'placeholder'
+                  optionTextStyle={{ color: 'black' }} // item nao selecionado na lista
+                  selectedItemTextStyle={{ color: 'green' }} // item selecionado na lista
+                  selectTextStyle={{ color: 'white' }} // texto do input
+                  selectStyle={{ borderWidth: 1, borderColor: 'white' }} // borda do input
+                  onChange={(option) => { setGeneroPrincipal(option.label) }}
               />
-               <RNPickerSelect
-                  placeholder={{
-                    label: 'Genero 2',
-                    value: "",
-                  }}
-                  onValueChange={(value) => setGeneroSecundario(value)}
-                  value={generoSecundario}
-                  items={selectGeneros}
-                  pickerProps={{ style: { height: 10 * ratio, width:win.width/2.5, overflow: 'hidden', color: "white", backgroundColor:"transparent" } }}
+              <ModalSelector
+                  data={selectGeneros}
+                  initValue={ generoSecundario || "Gênero 2" }
+                  style={{width: '40%'}}
+                  initValueTextStyle={{ color: 'white' }} // 'placeholder'
+                  optionTextStyle={{ color: 'black' }} // item nao selecionado na lista
+                  selectedItemTextStyle={{ color: 'green' }} // item selecionado na lista
+                  selectTextStyle={{ color: 'white' }} // texto do input
+                  selectStyle={{ borderWidth: 1, borderColor: 'white' }} // borda do input
+                  onChange={(option) => { setGeneroSecundario(option.label) }}
               />
           </View>
           </View>

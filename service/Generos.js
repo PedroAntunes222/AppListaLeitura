@@ -1,7 +1,7 @@
 export const  selectGeneros = [
-    { label: 'Fantasia', value: 'Fantasia' },
-    { label: 'Filosofia', value: 'Filosofia' },
-    { label: 'Romance', value: 'Romance' },
-    { label: 'Aventura', value: 'Aventura' },
-    { label: 'Ação', value: 'Ação' },
+    { key:0, label: 'Fantasia' },
+    { key:1, label: 'Filosofia' },
+    { key:2, label: 'Romance' },
+    { key:3, label: 'Aventura' },
+    { key:4, label: 'Ação' },
 ]

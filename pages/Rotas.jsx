@@ -3,12 +3,14 @@ import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import AuthContext from '../service/Auth'
 // import { Button } from "@react-native-material/core";
+import { NavigationContainer } from '@react-navigation/native';
 
 import { AuthProvider } from '../service/Auth';
 import ListaLivros from './ListaLivros/ListaLivros'
 import MostraLivro from './MostraLivro/MostraLivro';
 import AdicionaLivro from './AddLivro/AdicionaLivro';
 import EditaLivro from './EditLivro/EditaLivro';
+import Login from './Login/Login'
 // import AdicionaGenero from "./AddLivro/AddGenero/AdicionaGenero";
 
 export default function Rotas() {
@@ -16,9 +18,18 @@ export default function Rotas() {
   const Stack = createNativeStackNavigator();
 
   return (
-          <AuthProvider>
+    <NavigationContainer>
+    <Stack.Navigator
+            screenOptions={{
+              contentStyle:{backgroundColor:'#282c34'}
+            }}>
             <Stack.Screen name="Home" component={ListaLivros} options={{ 
                 title: 'Minha estante', 
+                headerStyle: {backgroundColor: '#343944'},
+                headerTintColor: '#fff',
+            }} />
+            <Stack.Screen name="Login" component={Login} options={{ 
+                title: 'Login', 
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff',
             }} />
@@ -37,6 +48,7 @@ export default function Rotas() {
                 headerStyle: {backgroundColor: '#343944'},
                 headerTintColor: '#fff', 
             }} />
-          </AuthProvider>
+           </Stack.Navigator>
+      </NavigationContainer>
   )
 }

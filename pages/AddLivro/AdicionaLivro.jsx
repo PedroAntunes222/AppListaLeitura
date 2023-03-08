@@ -1,23 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
-// import { addLivro } from '../../service/API';
 import Livro from '../../class/Livro'
-import * as SQLite from 'expo-sqlite';
 import { addLivro, initDB } from '../../localDatabase/sqliteDatabase';
 import { Image, Text, View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
-import AuthContext from '../../service/Auth';
-import RNPickerSelect from 'react-native-picker-select';
+import ModalSelector from 'react-native-modal-selector';
 import { Stack, Snackbar } from "@react-native-material/core";
 import { TextInput, FAB } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import {selectGeneros} from '../../service/Generos';
 
-export default function AdicionaLivro({navigation}) {
-
-  const [db, setDb] = useState(SQLite.openDatabase('biblioteca.db'));
+export default function AdicionaLivro() {
 
   const [snack, setSnack] = useState(false);
-  const [generos, setGeneros] = useState([]);
-  const { authenticated } = useContext(AuthContext);
   const [titulo, setTitulo] = useState('');
   const [subTitulo, setSubTitulo] = useState('');
   const [generoPrincipal, setGeneroPrincipal] = useState('');
@@ -36,7 +29,7 @@ export default function AdicionaLivro({navigation}) {
     setCapa("");
   };
 
-  const adicionaLivro = (e) => {
+  const adicionarLivro = (e) => {
     e.preventDefault();
 
     const novoLivro = new Livro(
@@ -71,7 +64,7 @@ export default function AdicionaLivro({navigation}) {
                 <FAB 
                   style={{backgroundColor:'green'}} 
                   icon={props => <AntDesign name="addfile" size={24} color="black" />} 
-                  onPress={(e) => {adicionaLivro(e)}} 
+                  onPress={(e) => {adicionarLivro(e)}} 
                 />
             </Stack>
 
@@ -119,27 +112,29 @@ export default function AdicionaLivro({navigation}) {
               theme={{ colors: { onSurfaceVariant: '#fff'} }}
           />
 
-          <View style={{flexDirection: "row", flexWrap: "wrap", justifyContent:'center'}}>
-              <RNPickerSelect
-                    placeholder={{
-                      label: 'Genero 1',
-                      value: "",
-                    }}
-                    onValueChange={(value) => setGeneroPrincipal(value)}
-                    value={generoPrincipal}
-                    items={selectGeneros}
-                    pickerProps={{ style: styles.generoSelector}}
-                />
-                <RNPickerSelect
-                    placeholder={{
-                      label: 'Genero 2',
-                      value: "",
-                    }}
-                    onValueChange={(value) => setGeneroSecundario(value)}
-                    value={generoSecundario}
-                    items={selectGeneros}
-                    pickerProps={{ style: styles.generoSelector }}
-                />
+          <View style={{flexDirection: "row", flexWrap: "wrap", justifyContent:'space-around'}}>
+              <ModalSelector
+                style={{width: '40%'}}
+                data={selectGeneros}
+                initValue="Gênero 1"
+                initValueTextStyle={{ color: 'white' }} // 'placeholder'
+                optionTextStyle={{ color: 'black' }} // item nao selecionado na lista
+                selectedItemTextStyle={{ color: 'green' }} // item selecionado na lista
+                selectTextStyle={{ color: 'white' }} // texto do input
+                selectStyle={{ borderWidth: 1, borderColor: 'white' }} // borda do input
+                onChange={(option) => { setGeneroPrincipal(option.label) }}
+              />
+              <ModalSelector
+                data={selectGeneros}
+                initValue="Gênero 2"
+                style={{width: '40%'}}
+                initValueTextStyle={{ color: 'white' }} // 'placeholder'
+                optionTextStyle={{ color: 'black' }} // item nao selecionado na lista
+                selectedItemTextStyle={{ color: 'green' }} // item selecionado na lista
+                selectTextStyle={{ color: 'white' }} // texto do input
+                selectStyle={{ borderWidth: 1, borderColor: 'white' }} // borda do input
+                onChange={(option) => { setGeneroSecundario(option.label) }}
+              />
           </View>
 
             <TextInput
