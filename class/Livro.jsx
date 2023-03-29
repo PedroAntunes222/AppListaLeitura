@@ -14,7 +14,7 @@ export default class Livro {
     }
   
     static fromMap(item) {
-      return new Magia(
+      return new Livro(
         item.id,
         item.capa,
         item.titulo,
